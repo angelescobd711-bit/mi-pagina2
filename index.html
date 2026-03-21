@@ -2,295 +2,264 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0">
     <title>Flores Amarillas</title>
     <style>
-        :root {
-            --bg-color: #fcf6f0;
-            --text-color: #5d4037;
-            --accent-yellow: #fbc02d;
-            --sunflower-yellow: #fdd835;
-            --stem-color: #a1887f;
-            --leaf-color: #4caf50;
-        }
-
-        /* Bloqueo estricto de zoom y movimiento lateral para iPhone */
-        html, body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            touch-action: none;
-            background-color: var(--bg-color);
-            font-family: -apple-system, system-ui, sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        #main-wrapper {
+        body {
+            background-color: #f5ebe1;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden; /* Permite scroll vertical pero no horizontal */
+        }
+
+        /* --- PANTALLA DE INICIO (Intacta) --- */
+        #start-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            height: 100vh;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        /* Pantalla de Inicio (Botón Inicial) */
-        #start-screen {
-            text-align: center;
-            animation: fadeIn 1s ease-in;
-            z-index: 10;
-        }
-
-        .sunflower-btn {
-            font-size: 80px;
+            justify-content: center;
+            z-index: 100;
+            background-color: #f5ebe1;
+            transition: opacity 0.5s ease;
             cursor: pointer;
-            display: inline-block;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
         }
 
-        .sunflower-btn:active { transform: scale(0.9); }
+        .sunflower-icon {
+            font-size: 80px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
 
         .click-text {
-            color: var(--text-color);
             margin-top: 15px;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            border-bottom: 2px solid var(--accent-yellow);
-            display: inline-block;
-            padding-bottom: 4px;
+            font-size: 1.3rem;
+            color: #5d4037;
+            border-bottom: 2px solid #fbc02d;
+            padding-bottom: 5px;
         }
 
-        /* Contenido Principal (Texto y Árbol Animado) */
+        /* --- CONTENIDO PRINCIPAL --- */
         #main-content {
-            display: none; /* Se activa al hacer click */
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
+            display: none;
             flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            height: 100%;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Contenedor del Texto (Escritura Automática) */
-        .text-container {
             width: 100%;
-            height: 180px; /* Altura fija para evitar saltos */
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding-left: 10px;
-        }
-
-        .typewriter {
-            font-size: 1.1rem;
-            color: var(--text-color);
-            line-height: 1.5;
-            font-weight: 500;
-            text-align: left;
-        }
-
-        /* === ÁRBOL DE GIRASOLES ANIMADO === */
-        .tree-viewport {
-            position: relative;
-            width: 320px;
-            height: 320px;
+            max-width: 500px;
             margin: 0 auto;
-            overflow: visible; /* Importante para que los girasoles caigan fuera */
+            flex: 1;
+            padding: 5vh 20px 40px 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
         }
 
-        /* Tronco y Ramas (SVG para fidelidad) */
-        .tree-structure {
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        #text-zone {
+            font-size: 1.15rem;
+            line-height: 1.4;
+            min-height: 130px;
+            margin-bottom: 10px;
+        }
+
+        .blinking {
+            font-weight: bold;
+            display: inline-block;
+            animation: blinker 1.5s infinite;
+        }
+
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* --- ZONA DEL ÁRBOL --- */
+        #tree-zone {
+            position: relative;
+            width: 300px;
+            height: 350px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Tronco Minimalista Intacto */
+        .trunk-svg {
             position: absolute;
-            width: 100%;
-            height: 100%;
             bottom: 0;
-            left: 0;
+            width: 150px;
+            height: 180px;
             z-index: 1;
         }
 
-        /* Contenedor para el corazón de girasoles */
-        #sunflower-heart {
+        #heart-container {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
             z-index: 2;
         }
 
-        /* Girasoles Individuales */
+        /* Girasoles */
         .sunflower {
             position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: var(--sunflower-yellow);
-            border-radius: 50%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            width: 16px; 
+            height: 16px;
+            background-color: #fce029; 
+            border-radius: 3px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            transition: opacity 0.4s ease;
         }
 
-        /* El centro oscuro del girasol */
+        .sunflower::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: inherit;
+            border-radius: inherit;
+            transform: rotate(45deg);
+        }
+
         .sunflower::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 50%;
-            height: 50%;
-            background-color: #5d4037;
+            width: 7.5px;
+            height: 7.5px;
+            background-color: #4a2e1b;
             border-radius: 50%;
+            z-index: 2;
         }
 
-        /* Animación de los Girasoles Cayendo */
-        @keyframes fallAndGather {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            80% { opacity: 1; }
-            100% {
-                transform: translateY(350px) translateX(var(--random-x, 0px)) rotate(var(--random-rot, 360deg));
-                opacity: 0; /* Se desvanecen al llegar abajo para que no se acumulen infinitamente en pantalla */
-            }
+        /* Animación de caída */
+        .falling-flower {
+            z-index: 3;
+            pointer-events: none;
+            animation: fallAnimation linear forwards;
         }
 
-        .sunflower.falling {
-            animation: fallAndGather var(--fall-duration, 5s) linear forwards;
-            animation-delay: var(--fall-delay, 0s);
+        @keyframes fallAnimation {
+            0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === CONTADOR DE TIEMPO === */
-        .counter-box {
-            margin-top: 25px;
-            padding: 15px;
-            background: rgba(255,255,255,0.7);
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            width: 90%;
-            border: 1px solid #f2e1d5;
-            z-index: 5;
-            text-align: center;
+        /* --- CONTADOR --- */
+        #counter-zone {
+            width: 100%;
+            margin-top: auto;
+            padding-top: 20px;
         }
 
-        .counter-label {
-            font-size: 0.85rem;
-            color: #8d6e63;
-            margin-bottom: 8px;
-            display: block;
+        .divider-line {
+            width: 100%;
+            height: 1.5px;
+            background-color: #1a1a1a;
+            margin: 10px 0;
         }
 
-        #countdown {
-            font-variant-numeric: tabular-nums;
-            font-weight: bold;
-            color: #5d4037;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-        }
-
-        /* Animaciones Globales */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .hidden { display: none !important; }
+        .counter-title { font-size: 1rem; margin-bottom: 5px; display: block; }
+        #timer { font-size: 1.1rem; font-weight: 500; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
 
-    <div id="main-wrapper">
-        <div id="start-screen">
-            <div class="sunflower-btn" onclick="startExperience()">🌻</div>
-            <br>
-            <div class="click-text">Flores Para Ti</div>
+    <div id="start-screen" onclick="iniciarExperiencia()">
+        <div class="sunflower-icon">🌻</div>
+        <div class="click-text">Flores Para Ti</div>
+    </div>
+
+    <div id="main-content">
+        <div id="text-zone"></div>
+
+        <div id="tree-zone">
+            <svg class="trunk-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line x1="50" y1="100" x2="50" y2="45" stroke="#6b4226" stroke-width="6" stroke-linecap="round"/>
+                <line x1="50" y1="75" x2="15" y2="35" stroke="#6b4226" stroke-width="4" stroke-linecap="round"/>
+                <line x1="50" y1="75" x2="85" y2="35" stroke="#6b4226" stroke-width="4" stroke-linecap="round"/>
+                <line x1="38" y1="61" x2="35" y2="30" stroke="#6b4226" stroke-width="3" stroke-linecap="round"/>
+                <line x1="62" y1="61" x2="65" y2="30" stroke="#6b4226" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <div id="heart-container"></div>
         </div>
 
-        <div id="main-content">
-            <div class="text-container">
-                <div class="typewriter" id="text-msg"></div>
-            </div>
-
-            <div class="tree-viewport">
-                <svg class="tree-structure" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax meet">
-                    <path d="M50 95 C 48 80, 48 60, 50 40" stroke="#a1887f" stroke-width="3" fill="none"/>
-                    <path d="M50 70 C 40 65, 30 55, 30 45" stroke="#a1887f" stroke-width="2" fill="none"/>
-                    <path d="M50 70 C 60 65, 70 55, 70 45" stroke="#a1887f" stroke-width="2" fill="none"/>
-                    <path d="M50 55 C 45 50, 40 40, 45 30" stroke="#a1887f" stroke-width="1.5" fill="none"/>
-                    <path d="M50 55 C 55 50, 60 40, 55 30" stroke="#a1887f" stroke-width="1.5" fill="none"/>
-                </svg>
-                
-                <div id="sunflower-heart"></div>
-            </div>
-
-            <div class="counter-box">
-                <span class="counter-label">Mi amor por ti comenzó hace...</span>
-                <div id="countdown">Cargando...</div>
-            </div>
+        <div id="counter-zone">
+            <div class="divider-line"></div>
+            <span class="counter-title">Mi amor por ti comenzó hace...</span>
+            <div id="timer">Calculando...</div>
+            <div class="divider-line"></div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN DE FECHA ---
-        // Pon aquí la fecha exacta del 1 de Diciembre (Año, 11, 1, Hora, Min, Seg)
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
-        
-        const messageText = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
+        const message = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
 
-        function startExperience() {
-            document.getElementById('start-screen').classList.add('hidden');
-            const main = document.getElementById('main-content');
-            main.style.display = 'flex';
-            
-            // Iniciar componentes
-            typeWriterText();
-            drawSunflowerHeartGrid();
-            
-            // Retrasar el inicio de la caída hasta que el texto haya avanzado
-            setTimeout(startSunflowerFall, 3000); 
-            
-            // Iniciar contador
-            updateTimer();
-            setInterval(updateTimer, 1000);
+        let charIndex = 0;
+        let staticFlowers = []; 
+
+        function iniciarExperiencia() {
+            document.getElementById('start-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('start-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+                
+                typeWriterText();
+                drawHeart(); 
+                
+                setTimeout(startFallingFlowers, 3500); 
+                
+                actualizarContador();
+                setInterval(actualizarContador, 1000);
+            }, 500);
         }
 
-        // 1. Escritura Automática del Texto
         function typeWriterText() {
-            let i = 0;
-            function type() {
-                if (i < messageText.length) {
-                    const char = messageText.charAt(i);
-                    document.getElementById('text-msg').innerHTML += char === '\n' ? '<br>' : char;
-                    i++;
-                    setTimeout(type, 65);
+            if (charIndex < message.length) {
+                const char = message.charAt(charIndex);
+                if (message.substring(charIndex, charIndex + 17) === "— I Love You! —") {
+                    document.getElementById('text-zone').innerHTML += '<span class="blinking">I Love You!</span>';
+                    charIndex += 17;
+                } else {
+                    document.getElementById('text-zone').innerHTML += char === '\n' ? '<br>' : char;
+                    charIndex++;
                 }
+                setTimeout(typeWriterText, 50);
             }
-            type();
         }
 
-        // 2. Dibujar Corazón Lleno (Grid Dinámico sin Huecos)
-        function drawSunflowerHeartGrid() {
-            const container = document.getElementById('sunflower-heart');
+        // LÓGICA DE RELLENO CORREGIDA: Cuadrícula uniforme para evitar huecos al 100%
+        function drawHeart() {
+            const container = document.getElementById('heart-container');
             const centerX = 150; 
-            const centerY = 125; // Alineación para que el árbol lo sostenga bien
+            const centerY = 135; // Nivel exacto del tronco recto
             const scale = 75; 
-            const step = 0.15; // Define la cercanía entre flores (menor = más tupido)
+            const step = 0.16; // Controla la distancia entre girasoles. Al ser fijo, no hay huecos.
 
-            let count = 0;
-
-            // Recorremos una cuadrícula matemática invisible
             for (let x = -1.5; x <= 1.5; x += step) {
                 for (let y = -1.5; y <= 1.5; y += step) {
                     
-                    // Añadimos una pequeña variación para que no parezca un tablero perfecto
-                    let jx = x + (Math.random() - 0.5) * step * 0.8;
-                    let jy = y + (Math.random() - 0.5) * step * 0.8;
+                    // Añadimos una variación minúscula (jitter) para que se vea natural y no cuadrado
+                    let jx = x + (Math.random() - 0.5) * step * 0.7;
+                    let jy = y + (Math.random() - 0.5) * step * 0.7;
 
-                    // Si el punto cae dentro de la silueta del corazón, ponemos la flor
+                    // Si la posición cae dentro de la silueta perfecta del corazón
                     if (Math.pow(jx*jx + jy*jy - 1, 3) - jx*jx * Math.pow(jy, 3) <= 0) {
                         
                         let px = centerX + jx * scale;
-                        let py = centerY - jy * scale;
+                        let py = centerY - jy * scale; 
 
                         let flower = document.createElement('div');
                         flower.className = 'sunflower';
@@ -301,12 +270,11 @@
                         
                         container.appendChild(flower);
                         staticFlowers.push(flower);
-                        count++;
                     }
                 }
             }
 
-            // Aparecen aleatoriamente, no como una línea
+            // Hacerlos aparecer al azar para mantener la magia de la animación
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
@@ -314,24 +282,19 @@
             });
         }
 
-        // 3. Iniciar la Animación de los Girasoles Cayendo (Ciclo)
-        let staticFlowers = []; // Guardará las flores estáticas para usarlas en la caída
-        function startSunflowerFall() {
+        function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
             setInterval(() => {
                 if (staticFlowers.length === 0) return;
                 
-                // Elegir una flor estática completamente al azar (de cualquier parte del corazón lleno)
                 const sourceFlower = staticFlowers[Math.floor(Math.random() * staticFlowers.length)];
                 
                 let falling = document.createElement('div');
                 falling.className = 'sunflower falling-flower';
-                // Copiar la posición exacta de la flor elegida
                 falling.style.left = sourceFlower.style.left;
                 falling.style.top = sourceFlower.style.top;
                 
-                // Duración aleatoria de caída entre 3 y 6 segundos
                 let duration = 3 + Math.random() * 3; 
                 falling.style.animationDuration = duration + 's';
                 
@@ -340,18 +303,17 @@
                 setTimeout(() => {
                     falling.remove();
                 }, duration * 1000);
-            }, 300); // Tira una flor cada 300ms
+            }, 300); 
         }
 
-        // 4. Lógica del Contador de Tiempo
-        function updateTimer() {
+        function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
             const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const m = Math.floor((diff / (1000 * 60)) % 60);
             const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('countdown').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos _`;
+            document.getElementById('timer').innerText = `${d} días ${h} horas ${m} minutos ${s} segundos _`;
         }
     </script>
 </body>
