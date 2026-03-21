@@ -14,17 +14,16 @@
         }
 
         body {
-            background-color: #f5ebe1; /* Color crema exacto del video */
+            background-color: #f5ebe1; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: #1a1a1a;
-            /* 100dvh asegura que se vea completo incluso con la barra de Safari */
             min-height: 100dvh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL (Original) === */
+        /* === PANTALLA DE BOTÓN INICIAL === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -38,7 +37,7 @@
             cursor: pointer;
         }
 
-        .sunflower-btn {
+        .sunflower-icon {
             font-size: 80px;
             animation: pulse 2s infinite;
         }
@@ -80,7 +79,6 @@
             margin-bottom: 10px;
         }
 
-        /* Texto parpadeante */
         .blinking {
             font-weight: bold;
             display: inline-block;
@@ -89,26 +87,26 @@
 
         @keyframes blinker { 50% { opacity: 0; } }
 
-        /* === ZONA DEL ÁRBOL EXCELENTEMENTE ALINEADA === */
+        /* === ZONA DEL ÁRBOL === */
         #tree-zone {
             position: relative;
             width: 300px;
-            height: 330px;
+            height: 350px;
             margin: 0 auto;
             display: flex;
             justify-content: center;
         }
 
-        /* Tronco orgánico y curvo SVG que sostiene el corazón */
+        /* NUEVO: Tronco de árbol sólido y realista */
         .trunk-svg {
             position: absolute;
-            bottom: 0;
+            bottom: 10px;
             width: 140px;
-            height: 160px;
+            height: 150px;
             z-index: 1;
         }
 
-        /* Contenedor del Corazón de girasoles (Alineado matemáticamente) */
+        /* Contenedor del Corazón */
         #heart-container {
             position: absolute;
             top: 0; left: 0; 
@@ -119,15 +117,14 @@
         /* Girasoles Individuales Estilo 🌼 */
         .sunflower {
             position: absolute;
-            width: 20px; /* Tamaño ligeramente aumentado para densidad ideal */
-            height: 20px;
-            background-color: #fce029; /* Color de pétalos */
-            border-radius: 4px; /* Bordes redondeados para simular pétalos cruzados */
+            width: 18px; /* Tamaño ideal para evitar huecos */
+            height: 18px;
+            background-color: #fce029; 
+            border-radius: 4px; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.15);
             transition: opacity 0.4s ease;
         }
 
-        /* Segunda capa de pétalos girada 45 grados */
         .sunflower::before {
             content: '';
             position: absolute;
@@ -138,7 +135,6 @@
             transform: rotate(45deg);
         }
 
-        /* Centro café oscuro */
         .sunflower::after {
             content: '';
             position: absolute;
@@ -151,7 +147,7 @@
             z-index: 2;
         }
 
-        /* Animación de caída de girasoles */
+        /* Animación de caída */
         .falling-flower {
             z-index: 3;
             pointer-events: none;
@@ -163,10 +159,10 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === CONTADOR CON LÍNEAS NEGRAS === */
+        /* === CONTADOR === */
         #counter-zone {
             width: 100%;
-            margin-top: auto; /* Empuja el contador hacia abajo */
+            margin-top: auto; 
             padding-top: 20px;
         }
 
@@ -184,7 +180,7 @@
 <body>
 
     <div id="start-screen" onclick="iniciarExperiencia()">
-        <div class="sunflower-btn">🌻</div>
+        <div class="sunflower-icon">🌻</div>
         <div class="click-text">Flores Para Ti</div>
     </div>
 
@@ -193,11 +189,7 @@
 
         <div id="tree-zone">
             <svg class="trunk-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M50,100 Q52,70 50,40" stroke="#6b4226" stroke-width="5" fill="none" stroke-linecap="round"/>
-                <path d="M50,65 Q30,55 15,25" stroke="#6b4226" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M50,70 Q75,60 85,20" stroke="#6b4226" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M35,45 Q25,35 20,25" stroke="#6b4226" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M65,55 Q80,40 85,35" stroke="#6b4226" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M 35 100 C 40 80, 45 60, 45 40 C 35 30, 20 25, 10 20 C 20 25, 35 35, 45 40 C 45 25, 40 10, 35 0 C 45 15, 50 30, 50 40 C 60 30, 75 25, 85 20 C 75 25, 60 35, 52 42 C 55 60, 60 80, 65 100 Z" fill="#6b4226"/>
             </svg>
             <div id="heart-container"></div>
         </div>
@@ -211,13 +203,11 @@
     </div>
 
     <script>
-        // Fecha exacta: 1 de Diciembre de 2025
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
-        
         const message = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
 
         let charIndex = 0;
-        let staticFlowers = []; // Guardará las flores estáticas para usarlas en la caída
+        let staticFlowers = []; 
 
         function iniciarExperiencia() {
             document.getElementById('start-screen').style.opacity = '0';
@@ -226,9 +216,8 @@
                 document.getElementById('main-content').style.display = 'flex';
                 
                 typeWriterText();
-                drawHeart(); // Primero se dibuja el corazón completo
+                drawHeart(); // Relleno sin huecos
                 
-                // Las flores caen una vez que el corazón ya está lleno
                 setTimeout(startFallingFlowers, 3500); 
                 
                 actualizarContador();
@@ -236,11 +225,9 @@
             }, 500);
         }
 
-        // 1. Efecto de Escritura Automática
         function typeWriterText() {
             if (charIndex < message.length) {
                 const char = message.charAt(charIndex);
-                // Si es la frase final parpadeante "I Love You!"
                 if (message.substring(charIndex, charIndex + 17) === "— I Love You! —") {
                     document.getElementById('text-zone').innerHTML += '<span class="blinking">I Love You!</span>';
                     charIndex += 17;
@@ -252,70 +239,62 @@
             }
         }
 
-        // 2. Dibujar Corazón Lleno (Solución al Relleno Aleatorio, Tupido y Sin Huecos Grandes)
+        // SOLUCIÓN DEFINITIVA A LOS HUECOS: Relleno por Cuadrícula con Variación
         function drawHeart() {
             const container = document.getElementById('heart-container');
-            const numGirasoles = 250; // Cantidad ideal para rellenar sin saturar (antes 350)
-            
             const centerX = 150; 
-            const centerY = 167; // Posición bajada matemáticamente para alineación PERFECTA sobre ramas
-            const scaleX = 72; // Escala ideal para silueta perfecta
-            const scaleY = 75; 
+            const centerY = 145; // Alineación para que el árbol lo sostenga bien
+            const scale = 75; // Escala perfecta
+            const step = 0.15; // Define la cercanía entre flores (menor = más tupido)
 
-            let count = 0;
-
-            // Rejection Sampling para relleno aleatorio perfecto del área de un corazón
-            while(count < numGirasoles) {
-                // Generar puntos aleatorios en el plano
-                let x = (Math.random() - 0.5) * 3; 
-                let y = (Math.random() - 0.5) * 3; 
-
-                // Inecuación matemática del corazón relleno (x^2 + y^2 - 1)^3 - x^2 * y^3 <= 0
-                if (Math.pow(x*x + y*y - 1, 3) - x*x * Math.pow(y, 3) <= 0) {
+            // Recorremos una cuadrícula matemática invisible
+            for (let x = -1.5; x <= 1.5; x += step) {
+                for (let y = -1.5; y <= 1.5; y += step) {
                     
-                    let px = centerX + x * scaleX;
-                    let py = centerY - y * scaleY; // Invertimos Y para pantalla
+                    // Añadimos una pequeña variación para que no parezca un tablero perfecto
+                    let jx = x + (Math.random() - 0.5) * step * 0.8;
+                    let jy = y + (Math.random() - 0.5) * step * 0.8;
 
-                    let flower = document.createElement('div');
-                    flower.className = 'sunflower';
-                    // Usamos transform para centrar exactamente el girasol en la coordenada
-                    flower.style.left = px + 'px';
-                    flower.style.top = py + 'px';
-                    // Rotación base aleatoria para que se vean desordenados naturalmente
-                    flower.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 90}deg)`;
-                    flower.style.opacity = '0'; // Nacen invisibles
-                    
-                    container.appendChild(flower);
-                    staticFlowers.push(flower);
-                    count++;
+                    // Si el punto cae dentro de la silueta del corazón, ponemos la flor
+                    if (Math.pow(jx*jx + jy*jy - 1, 3) - jx*jx * Math.pow(jy, 3) <= 0) {
+                        
+                        let px = centerX + jx * scale;
+                        let py = centerY - jy * scale;
+
+                        let flower = document.createElement('div');
+                        flower.className = 'sunflower';
+                        flower.style.left = px + 'px';
+                        flower.style.top = py + 'px';
+                        flower.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 90}deg)`;
+                        flower.style.opacity = '0'; 
+                        
+                        container.appendChild(flower);
+                        staticFlowers.push(flower);
+                    }
                 }
             }
 
-            // Desordenamos el array para que nazcan saltados y aleatorios, no en línea consecutiva
+            // Aparecen en desorden para conservar el efecto mágico
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
-                }, idx * 6); // Velocidad de aparición progresiva aleatoria
+                }, idx * 4); 
             });
         }
 
-        // 3. Iniciar Caída de Girasoles (Solución a la Caída Global de Todo el Corazón)
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
             setInterval(() => {
                 if (staticFlowers.length === 0) return;
                 
-                // Elegir una flor estática completamente al azar (de cualquier parte del corazón lleno)
                 const sourceFlower = staticFlowers[Math.floor(Math.random() * staticFlowers.length)];
                 
                 let falling = document.createElement('div');
                 falling.className = 'sunflower falling-flower';
-                // Copiar la posición exacta de la flor elegida
                 falling.style.left = sourceFlower.style.left;
                 falling.style.top = sourceFlower.style.top;
                 
-                // Duración aleatoria de caída entre 3 y 6 segundos
                 let duration = 3 + Math.random() * 3; 
                 falling.style.animationDuration = duration + 's';
                 
@@ -324,10 +303,9 @@
                 setTimeout(() => {
                     falling.remove();
                 }, duration * 1000);
-            }, 300); // Tira una flor cada 300ms
+            }, 300); 
         }
 
-        // 4. Reloj
         function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
