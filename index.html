@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Flores Amarillas</title>
     <style>
-        /* === RESET Y BLOQUEO DE ZOOM PARA MÓVILES === */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL === */
+        /* --- PANTALLA DE INICIO --- */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -56,7 +55,7 @@
             padding-bottom: 5px;
         }
 
-        /* === CONTENIDO PRINCIPAL === */
+        /* --- CONTENIDO PRINCIPAL --- */
         #main-content {
             display: none;
             flex-direction: column;
@@ -86,17 +85,17 @@
 
         @keyframes blinker { 50% { opacity: 0; } }
 
-        /* === ZONA DEL ÁRBOL UNIDA === */
+        /* --- ZONA DEL ÁRBOL --- */
         #tree-zone {
             position: relative;
             width: 300px;
-            height: 340px;
+            height: 350px;
             margin: 0 auto;
             display: flex;
             justify-content: center;
         }
 
-        /* Nuevo Tronco estilo minimalista/recto */
+        /* Tronco Minimalista (Estilo de tu imagen) */
         .trunk-svg {
             position: absolute;
             bottom: 0;
@@ -112,11 +111,11 @@
             z-index: 2;
         }
 
-        /* Girasoles Estilo 🌼 */
+        /* Girasoles tipo 🌼 */
         .sunflower {
             position: absolute;
-            width: 15px; 
-            height: 15px;
+            width: 16px; 
+            height: 16px;
             background-color: #fce029; 
             border-radius: 3px; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.15);
@@ -138,8 +137,8 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 7px;
-            height: 7px;
+            width: 7.5px;
+            height: 7.5px;
             background-color: #4a2e1b;
             border-radius: 50%;
             z-index: 2;
@@ -157,7 +156,7 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === CONTADOR === */
+        /* --- CONTADOR --- */
         #counter-zone {
             width: 100%;
             margin-top: auto;
@@ -205,7 +204,7 @@
     </div>
 
     <script>
-        // Fecha exacta: 1 de Diciembre de 2025
+        // Fecha 1 de Diciembre de 2025
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
         const message = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
 
@@ -238,22 +237,21 @@
                     document.getElementById('text-zone').innerHTML += char === '\n' ? '<br>' : char;
                     charIndex++;
                 }
-                setTimeout(typeWriterText, 60);
+                setTimeout(typeWriterText, 50);
             }
         }
 
         function drawHeart() {
             const container = document.getElementById('heart-container');
-            const numGirasoles = 320; // Relleno denso sin saturar
+            const numGirasoles = 350; // Cantidad para que esté relleno sin huecos
             
             const centerX = 150; 
-            // Posición exacta para que la punta del corazón toque las ramas del SVG
-            const centerY = 125; 
-            const scale = 70; 
+            const centerY = 135; // Nivelado para que toque exactamente las ramas
+            const scale = 75; 
 
             let count = 0;
 
-            // Algoritmo para rellenar perfectamente todo el interior del corazón
+            // Rellenar aleatoriamente dentro de la silueta perfecta
             while(count < numGirasoles) {
                 let x = (Math.random() - 0.5) * 3; 
                 let y = (Math.random() - 0.5) * 3; 
@@ -276,7 +274,7 @@
                 }
             }
 
-            // Aparecen aleatoriamente, no como una línea
+            // Aparecen al azar, no en fila
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
