@@ -1,404 +1,290 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Para Tí - Ángeles</title>
-<style>
-    /* --- Base Styles --- */
-    :root {
-        --pink-bg: #ffe0eb; /* Soft Pink background */
-        --dark-brown: #5d4037; /* Trunk color */
-        --text-color: #333; /* Soft text color */
-        --sf-yellow: #fdd835; /* Sunflower color */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+    <title>Flores Amarillas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        cursor: default;
-    }
+        body {
+            background-color: #f5ebe1;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1a1a1a;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    body {
-        background-color: var(--pink-bg);
-        color: var(--text-color);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden;
-        position: relative;
-    }
+        #start-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background-color: #f5ebe1;
+            transition: opacity 0.5s ease;
+        }
 
-    /* --- Page Layout --- */
-    .page-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        width: 100%;
-        max-width: 380px; /* Limit width on mobile */
-        height: 100%;
-        position: relative;
-        z-index: 10;
-        padding-top: 10vh; /* Push content down slightly */
-    }
+        #start-btn {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border: 1.5px solid #1a1a1a;
+            background: transparent;
+            border-radius: 10px;
+            cursor: pointer;
+        }
 
-    /* --- Background Overlay with Hearts --- */
-    .background-overlay {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background-image: radial-gradient(#ffc8db 15%, transparent 16%), radial-gradient(#ffc8db 15%, transparent 16%);
-        background-size: 50px 50px;
-        background-position: 0 0, 25px 25px;
-        filter: blur(20px);
-        opacity: 0.15;
-        z-index: 0;
-    }
+        #main-content {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            flex: 1;
+            padding: 5vh 20px 40px 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
 
-    /* --- Text Elements (Top) --- */
-    header {
-        text-align: left;
-        align-self: flex-start;
-        padding: 0 20px;
-        margin-bottom: 20px;
-        width: 100%;
-    }
+        @keyframes fadeIn { to { opacity: 1; } }
 
-    .typing-text {
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: var(--text-color);
-        margin-bottom: 5px;
-        overflow: hidden;
-        white-space: nowrap;
-        display: none; /* Initially hide all paragraphs */
-    }
+        #text-zone {
+            font-size: 1.15rem;
+            line-height: 1.4;
+            min-height: 130px;
+            margin-bottom: 10px;
+        }
 
-    .typing-text:last-child {
-        margin-bottom: 0;
-    }
+        /* --- ZONA DEL ÁRBOL EXACTA --- */
+        #tree-zone {
+            position: relative;
+            width: 300px;
+            height: 320px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
 
-    /* --- Central Animation Area --- */
-    .animation-area {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        position: relative;
-        overflow: visible; /* Allow falling flowers to pass boundaries */
-    }
+        .trunk-svg {
+            position: absolute;
+            bottom: 0;
+            width: 80px;
+            height: 130px;
+            z-index: 1;
+        }
 
-    /* --- Tree Trunk and Crown --- */
-    .tree {
-        position: absolute;
-        bottom: 20vh; /* Position the trunk base */
-        width: 180px;
-        height: 250px;
-        z-index: 5;
-    }
+        #heart-container {
+            position: absolute;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+        }
 
-    .trunk-svg {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px; /* Wider trunk */
-        height: 150px; /* Taller trunk */
-        filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
-    }
+        .sunflower {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #fce029;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: opacity 0.4s ease;
+        }
 
-    /* Crown populated by dense sunflowers */
-    .crown {
-        position: absolute;
-        bottom: 120px; /* Position the crown center */
-        left: 50%;
-        transform: translateX(-50%);
-        width: 160px;
-        height: 140px;
-        z-index: 10;
-    }
+        .sunflower::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background-color: #4a2e1b;
+            border-radius: 50%;
+        }
 
-    /* Basic Sunflower Shape */
-    .sunflower {
-        position: absolute;
-        width: 14px; /* Tiny sunflowers */
-        height: 14px;
-        background-color: var(--sf-yellow);
-        border-radius: 50%;
-        box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-        z-index: 10;
-    }
+        .falling-flower {
+            z-index: 3;
+            pointer-events: none;
+            animation: fallAnimation linear forwards;
+        }
 
-    .sunflower::after {
-        content: '';
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        width: 6px;
-        height: 6px;
-        background-color: var(--dark-brown);
-        border-radius: 50%;
-    }
+        @keyframes fallAnimation {
+            0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
+        }
 
-    /* Falling Flowers Container */
-    .falling-flowers {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        z-index: 1;
-        overflow: visible;
-    }
+        /* --- CONTADOR --- */
+        #counter-zone {
+            width: 100%;
+            margin-top: auto;
+            padding-top: 20px;
+        }
 
-    /* --- Falling Sunflower Animation --- */
-    .falling-sunflower {
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        background-color: var(--sf-yellow);
-        border-radius: 50%;
-        animation: fallDown var(--fall-speed) linear infinite, fallRotate var(--rotate-speed) linear infinite, fallVariation var(--vary-speed) ease-in-out infinite;
-        opacity: var(--fall-opacity);
-    }
+        .divider-line {
+            width: 100%;
+            height: 1.5px;
+            background-color: #1a1a1a;
+            margin: 10px 0;
+        }
 
-    .falling-sunflower::after {
-        content: '';
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        width: 8px;
-        height: 8px;
-        background-color: var(--dark-brown);
-        border-radius: 50%;
-    }
-
-    @keyframes fallDown {
-        0% { transform: translateY(-50px); opacity: 0; }
-        10% { opacity: var(--fall-opacity); }
-        100% { transform: translateY(110vh); opacity: 0; }
-    }
-
-    @keyframes fallRotate {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(var(--fall-rotation)); }
-    }
-
-    @keyframes fallVariation {
-        0% { transform: translateX(0); }
-        50% { transform: translateX(var(--fall-drift)); }
-        100% { transform: translateX(0); }
-    }
-
-    /* --- Footer (Blinking Text and Counter) --- */
-    footer {
-        text-align: center;
-        padding: 0 20px;
-        margin-bottom: 10vh; /* Blinking text position */
-        width: 100%;
-        position: relative;
-        z-index: 15;
-    }
-
-    .blinking-text {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #333;
-        animation: blinkingCursor 1.2s infinite;
-        display: none;
-    }
-
-    .blinking-counter {
-        font-size: 1rem;
-        color: #555;
-        animation: blinkingCursor 1.5s infinite;
-        display: none;
-        margin-top: 5px;
-    }
-
-    /* Cursor Style */
-    .cursor {
-        display: inline-block;
-        width: 8px;
-        height: 1.2rem;
-        background-color: var(--text-color);
-        margin-left: 3px;
-        vertical-align: bottom;
-        animation: blinkingCursor 1s infinite;
-    }
-
-    /* Blinking Keyframes */
-    @keyframes blinkingCursor {
-        0% { opacity: 0; }
-        50% { opacity: 1; }
-        100% { opacity: 0; }
-    }
-
-    /* Progress Bar (at the bottom center) */
-    .progress-bar {
-        position: absolute;
-        bottom: 5vh;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 300px;
-        height: 2px;
-        background-color: #333;
-    }
-
-</style>
+        .counter-title { 
+            font-size: 1rem; 
+            margin-bottom: 5px; 
+            display: block; 
+        }
+        
+        #timer { 
+            font-size: 1.1rem; 
+            font-weight: 500; 
+            letter-spacing: 0.5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="background-overlay"></div>
-    <main class="page-content">
-        <header>
-            <p id="top-text-1" class="typing-text">Flores Amarillas para el amor de mi vida:</p>
-            <p id="top-text-2" class="typing-text">Si pudiera elegir un lugar seguro, sería a tu lado.</p>
-            <p id="top-text-3" class="typing-text">Cuanto más tiempo estoy contigo más te amo.</p>
-        </header>
-        <section class="animation-area">
-            <div class="tree">
-                <svg class="trunk-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <path d="M50,100 C50,85 45,70 45,55 S55,30 55,10 C55,0 45,0 45,10 S45,30 45,55 Q45,70 50,100 Z" fill="#5d4037"/>
-                    <path d="M50,100 C50,80 40,65 35,50" stroke="#5d4037" stroke-width="3" fill="none"/>
-                    <path d="M50,100 C50,75 60,60 65,45" stroke="#5d4037" stroke-width="3" fill="none"/>
-                </svg>
-                <div class="crown" id="crown">
-                    </div>
-                <div class="falling-flowers" id="falling-flowers">
-                    </div>
-            </div>
-        </section>
-        <footer>
-            <p class="love-text"><span id="blinking-text-p" class="blinking-text">I Love You! <span class="cursor">_</span></span></p>
-            <p class="counter-text"><span id="blinking-counter-p" class="blinking-counter">364 días 23 horas 59 minutos 58 segundos <span class="cursor">_</span></span></p>
+
+    <div id="start-screen">
+        <button id="start-btn" onclick="iniciarExperiencia()">Contira tu an button</button>
+    </div>
+
+    <div id="main-content">
+        <div id="text-zone"></div>
+
+        <div id="tree-zone">
+            <svg class="trunk-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M50,100 L50,50 M50,80 L35,60 M50,75 L65,55 M50,65 L40,45 M50,60 L60,40" 
+                stroke="#6b4226" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div id="heart-container"></div>
         </div>
-        <div class="progress-bar"></div>
-    </main>
+
+        <div id="counter-zone">
+            <div class="divider-line"></div>
+            <span class="counter-title">Mi amor por ti comenzó hace...</span>
+            <div id="timer">Calculando...</div>
+            <div class="divider-line"></div>
+        </div>
+    </div>
 
     <script>
-        // --- Configuration ---
-        const config = {
-            numSunflowers: 350, // Dense crown with smaller sunflowers
-            heartPath: "M 80, 20 C 100, 0, 130, 0, 150, 20 C 170, 0, 200, 0, 220, 20 C 260, 60, 200, 100, 150, 140 C 100, 100, 40, 60, 80, 20 Z",
-            sfSize: 14, // Tiny sunflower size in pixels
-            fallInterval: 200, // Interval between falling flowers (ms)
-            cursorBlinkInterval: 1000,
-        };
+        // Fecha exacta: 1 de Diciembre de 2025
+        const startDate = new Date(2025, 11, 1, 0, 0, 0); 
+        const mensajeTexto = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
+        
+        let staticFlowers = []; // Guardará las flores del corazón para usarlas en la caída
 
-        // --- Typing Animation ---
-        function typeWriter() {
-            const texts = ["Flores Amarillas para el amor de mi vida:", "Si pudiera elegir un lugar seguro, sería a tu lado.", "Cuanto más tiempo estoy contigo más te amo."];
-            let textIndex = 0;
-            
-            function typeNext() {
-                if (textIndex >= texts.length) {
-                    // Start Blinking Footer Text and Counter
-                    document.getElementById('blinking-text-p').style.display = 'block';
-                    document.getElementById('blinking-counter-p').style.display = 'block';
-                    // Populate Dense Heart
-                    populateHeartDense();
-                    return;
+        function iniciarExperiencia() {
+            document.getElementById('start-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('start-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+                
+                escribirTexto();
+                crearCorazonRelleno();
+                actualizarContador();
+                setInterval(actualizarContador, 1000);
+                
+                // Las flores caen una vez que el corazón ya está lleno
+                setTimeout(caidaGirasoles, 3500);
+            }, 500);
+        }
+
+        function escribirTexto() {
+            let i = 0;
+            const zone = document.getElementById('text-zone');
+            function type() {
+                if (i < mensajeTexto.length) {
+                    zone.innerHTML += mensajeTexto.charAt(i) === '\n' ? '<br>' : mensajeTexto.charAt(i);
+                    i++;
+                    setTimeout(type, 45);
                 }
-                const targetId = `top-text-${textIndex + 1}`;
-                const targetElement = document.getElementById(targetId);
-                targetElement.style.display = 'block';
-                const text = texts[textIndex];
-                let charIndex = 0;
-
-                const timer = setInterval(() => {
-                    if (charIndex >= text.length) {
-                        clearInterval(timer);
-                        textIndex++;
-                        typeNext();
-                        return;
-                    }
-                    targetElement.textContent = text.substring(0, charIndex + 1);
-                    charIndex++;
-                }, 50); // Typing speed
             }
-            typeNext();
+            type();
         }
 
-        // --- Crown Population: Dense Random Sunflowers (Denser initially) ---
-        function populateHeartDense() {
-            const crownContainer = document.getElementById('crown');
-            const svgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            svgPath.setAttribute('d', config.heartPath);
-            const pathLength = svgPath.getTotalLength();
+        function crearCorazonRelleno() {
+            const container = document.getElementById('heart-container');
+            const total = 350; // Cantidad para que se vea lleno
             
-            for (let i = 0; i < config.numSunflowers; i++) {
-                let inside = false;
-                let point;
-                while (!inside) {
-                    const t = Math.random(); // Random path sample
-                    point = svgPath.getPointAtLength(t * pathLength);
-                    // Check if point is inside heart
-                    inside = true; // In this simple case, path samples are inside enough
+            // Centro exacto alineado con el tronco
+            const centerX = 150; 
+            const centerY = 110; 
+            const scale = 2.8; // Tamaño ajustado para que no sea inmenso
+
+            let count = 0;
+
+            // Relleno matemático exacto del área de un corazón
+            while(count < total) {
+                let x = (Math.random() - 0.5) * 3; // Coordenada X entre -1.5 y 1.5
+                let y = (Math.random() - 0.5) * 3; // Coordenada Y entre -1.5 y 1.5
+
+                // Inecuación del corazón relleno: (x^2 + y^2 - 1)^3 - x^2 * y^3 <= 0
+                if (Math.pow(x*x + y*y - 1, 3) - x*x * Math.pow(y, 3) <= 0) {
+                    
+                    let px = centerX + x * 30 * scale;
+                    let py = centerY - y * 30 * scale; // Invertimos Y porque en pantallas Y crece hacia abajo
+
+                    let flower = document.createElement('div');
+                    flower.className = 'sunflower';
+                    flower.style.left = px + 'px';
+                    flower.style.top = py + 'px';
+                    flower.style.opacity = '0'; // Nacen invisibles
+                    
+                    container.appendChild(flower);
+                    staticFlowers.push(flower);
+                    count++;
                 }
-                const sf = document.createElement('div');
-                sf.className = 'sunflower';
-                sf.style.left = `${point.x - (config.sfSize / 2)}px`;
-                sf.style.top = `${point.y - (config.sfSize / 2)}px`;
-                // Add minor random rotation
-                sf.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
-                crownContainer.appendChild(sf);
             }
+
+            // Mezclar el array para que aparezcan en orden aleatorio (no consecutivamente)
+            staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
+                setTimeout(() => {
+                    f.style.opacity = '1';
+                }, idx * 8); // Aparece una nueva flor cada 8 milisegundos aleatoriamente
+            });
         }
 
-        // --- Falling Flowers Animation (Drifting and Variability) ---
-        function spawnFallingSunflower() {
-            const fallingFlowersContainer = document.getElementById('falling-flowers');
-            const treeCrown = document.getElementById('crown');
-            const sunflowersInCrown = treeCrown.getElementsByClassName('sunflower');
+        function caidaGirasoles() {
+            const container = document.getElementById('heart-container');
             
-            if (sunflowersInCrown.length === 0) return; // Prevent spawning if crown is empty
-
-            // Choose a random sunflower from the heart to "clone" and drop
-            const randomSfIndex = Math.floor(Math.random() * sunflowersInCrown.length);
-            const randomSfCrown = sunflowersInCrown[randomSfIndex];
-            
-            // Get position of chosen flower in tree coordinates
-            const randomSfPosition = randomSfCrown.getBoundingClientRect();
-            const treePosition = document.querySelector('.tree').getBoundingClientRect();
-            const spawnX = randomSfPosition.left - treePosition.left;
-            const spawnY = randomSfPosition.top - treePosition.top;
-
-            const fallingSf = document.createElement('div');
-            fallingSf.className = 'falling-sunflower';
-            fallingSf.style.left = `${spawnX}px`;
-            fallingSf.style.top = `${spawnY}px`;
-            
-            // Random variability
-            const fallSpeed = 10 + Math.random() * 15 + "s";
-            const rotateSpeed = 8 + Math.random() * 10 + "s";
-            const rotation = Math.random() * 360 * 3 + "deg";
-            const drift = Math.random() * 60 - 30 + "px";
-            const aryOpacity = Math.random() * 0.4 + 0.3; // Varying opacity for depth
-            const sfOpacity = aryOpacity.toFixed(2);
-            
-            fallingSf.style.setProperty('--fall-speed', fallSpeed);
-            fallingSf.style.setProperty('--rotate-speed', rotateSpeed);
-            fallingSf.style.setProperty('--fall-rotation', rotation);
-            fallingSf.style.setProperty('--fall-drift', drift);
-            fallingSf.style.setProperty('--fall-opacity', sfOpacity);
-
-            fallingFlowersContainer.appendChild(fallingSf);
-
-            // Clean up old flowers to prevent DOM overflow
-            fallingSf.addEventListener('animationiteration', () => {
-                fallingSf.remove();
-            }, { once: true });
+            setInterval(() => {
+                if (staticFlowers.length === 0) return;
+                
+                // Elegir una flor estática completamente al azar (de cualquier parte del corazón)
+                const sourceFlower = staticFlowers[Math.floor(Math.random() * staticFlowers.length)];
+                
+                let falling = document.createElement('div');
+                falling.className = 'sunflower falling-flower';
+                // Copiar la posición exacta de la flor elegida
+                falling.style.left = sourceFlower.style.left;
+                falling.style.top = sourceFlower.style.top;
+                
+                let dur = 3 + Math.random() * 3; // Caída aleatoria entre 3 y 6 segundos
+                falling.style.animationDuration = dur + 's';
+                
+                container.appendChild(falling);
+                
+                setTimeout(() => {
+                    falling.remove();
+                }, dur * 1000);
+            }, 300); // Tira una flor cada 300ms
         }
 
-        // --- Initialization on load ---
-        window.addEventListener('load', () => {
-            typeWriter();
-            setInterval(spawnFallingSunflower, config.fallInterval); // Repeated spawning
-        });
-
+        function actualizarContador() {
+            const now = new Date();
+            const diff = now - startDate;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            
+            document.getElementById('timer').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos _`;
+        }
     </script>
 </body>
 </html>
