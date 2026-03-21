@@ -242,7 +242,10 @@
         // === SILUETA PERFECTA, CENTRADA Y TEXTURIZADA ===
         function drawHeart() {
             const container = document.getElementById('heart-container');
-            const centerX = 150; 
+            
+            // CORRECCIÓN DE ALINEACIÓN: 
+            // Se movió de 150 a 138 (12px = ~1 girasol a la izquierda) para compensar el peso visual del panal.
+            const centerX = 138; 
             const centerY = 135; 
             const scaleX = 78; 
             const scaleY = 82; 
