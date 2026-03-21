@@ -2,10 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0">
     <title>Flores Amarillas</title>
     <style>
-        /* === RESET Y BLOQUEO ESTRICTO PARA IPHONE === */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -13,19 +12,17 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
+        body {
             width: 100vw;
             height: 100vh;
-            background-color: #f5ebe1; /* Color crema exacto del video */
+            background-color: #f5ebe1;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: #1a1a1a;
-            position: fixed; /* Evita cualquier tipo de scroll o zoom */
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL === */
         #start-screen {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             align-items: center;
@@ -36,74 +33,60 @@
         }
 
         #start-btn {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            border: 1px solid #1a1a1a;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border: 1.5px solid #1a1a1a;
             background: transparent;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-family: inherit;
         }
 
-        /* === CONTENIDO PRINCIPAL === */
         #main-content {
             display: none;
             flex-direction: column;
             width: 100%;
-            height: 100%;
-            padding: 6vh 6vw 4vh 6vw;
+            min-height: 100vh;
+            padding: 20px;
             opacity: 0;
             animation: fadeIn 1s forwards;
         }
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* --- ZONA DE TEXTO --- */
         #text-zone {
-            font-size: 1.15rem;
-            line-height: 1.5;
-            min-height: 25vh;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            height: 120px;
         }
 
-        /* --- ZONA DEL ÁRBOL --- */
+        /* --- CONTENEDOR ÁRBOL --- */
         #tree-zone {
             position: relative;
-            flex-grow: 1;
             width: 100%;
+            height: 350px;
             display: flex;
             justify-content: center;
-            align-items: flex-end;
-            margin-bottom: 2vh;
+            align-items: center;
+            margin: 20px 0;
         }
 
-        /* Tronco texturizado */
-        .trunk {
+        .trunk-svg {
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 35px;
-            height: 90px;
-            background: repeating-linear-gradient(
-                90deg,
-                #6b4226,
-                #6b4226 4px,
-                #4a2e1b 4px,
-                #4a2e1b 8px
-            );
-            border-radius: 5px 5px 0 0;
+            bottom: 20px;
+            width: 120px;
+            height: 180px;
             z-index: 1;
         }
 
-        /* Estilo base de los girasoles */
         .sunflower {
             position: absolute;
-            width: 16px;
-            height: 16px;
-            background-color: #fce029; /* Amarillo Girasol */
+            width: 14px;
+            height: 14px;
+            background-color: #fce029;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .sunflower::after {
@@ -111,20 +94,12 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 7px;
-            height: 7px;
-            background-color: #4a2e1b; /* Centro café */
+            width: 6px;
+            height: 6px;
+            background-color: #4a2e1b;
             border-radius: 50%;
         }
 
-        /* Capa 1: Corazón estático (No se mueve) */
-        .static-flower {
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        /* Capa 2: Flores cayendo */
         .falling-flower {
             z-index: 3;
             animation: fallAnimation linear forwards;
@@ -132,36 +107,25 @@
 
         @keyframes fallAnimation {
             0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translate(-50%, 40vh) rotate(360deg); opacity: 0; }
+            100% { transform: translate(-50%, 400px) rotate(360deg); opacity: 0; }
         }
 
-        /* --- ZONA DEL CONTADOR --- */
+        /* --- CONTADOR --- */
         #counter-zone {
             width: 100%;
-            text-align: left;
-            position: relative;
+            padding: 15px 0;
+            margin-top: auto;
         }
 
-        /* Líneas separadoras idénticas al video */
         .divider-line {
             width: 100%;
-            height: 2px;
+            height: 1.5px;
             background-color: #1a1a1a;
-            margin: 5px 0;
+            margin: 10px 0;
         }
 
-        .counter-title {
-            font-size: 1.05rem;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        #timer {
-            font-size: 1.15rem;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-        }
+        .counter-title { font-size: 1rem; margin-bottom: 5px; display: block; }
+        #timer { font-size: 1.1rem; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -174,25 +138,25 @@
         <div id="text-zone"></div>
 
         <div id="tree-zone">
-            <div class="trunk"></div>
-            </div>
+            <svg class="trunk-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M50,100 L50,60 M50,85 L35,65 M50,80 L65,60 M50,70 L40,50 M50,65 L60,45" 
+                stroke="#6b4226" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div id="heart-container" style="position: absolute; width: 100%; height: 100%;"></div>
+        </div>
 
         <div id="counter-zone">
-            <div class="divider-line" style="margin-bottom: 15px;"></div>
+            <div class="divider-line"></div>
             <span class="counter-title">Mi amor por ti comenzó hace...</span>
             <div id="timer">Calculando...</div>
-            <div class="divider-line" style="margin-top: 5px;"></div>
+            <div class="divider-line"></div>
         </div>
     </div>
 
     <script>
-        // === 1. FECHA EXACTA: 1 DE DICIEMBRE DE 2025 ===
-        // (Año 2025, Mes 11 porque Enero es 0, Día 1)
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
-        
-        const mensajeTexto = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! _";
+        const mensajeTexto = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
 
-        // === 2. INICIO DE LA APP ===
         function iniciarExperiencia() {
             document.getElementById('start-screen').style.opacity = '0';
             setTimeout(() => {
@@ -200,115 +164,99 @@
                 document.getElementById('main-content').style.display = 'flex';
                 
                 escribirTexto();
-                dibujarCorazonEstatico();
-                
-                // Las flores empiezan a caer después de 2 segundos para que se aprecie el árbol lleno
-                setTimeout(iniciarCaidaFlores, 2000); 
-                
-                actualizarContador();
+                crearCorazonRelleno();
                 setInterval(actualizarContador, 1000);
+                setTimeout(caidaGirasoles, 2000);
             }, 500);
         }
 
-        // === 3. ESCRITURA LETRA POR LETRA ===
-        let i = 0;
         function escribirTexto() {
-            if (i < mensajeTexto.length) {
-                const char = mensajeTexto.charAt(i);
-                document.getElementById('text-zone').innerHTML += char === '\n' ? '<br>' : char;
-                i++;
-                setTimeout(escribirTexto, 50);
+            let i = 0;
+            const zone = document.getElementById('text-zone');
+            function type() {
+                if (i < mensajeTexto.length) {
+                    zone.innerHTML += mensajeTexto.charAt(i) === '\n' ? '<br>' : mensajeTexto.charAt(i);
+                    i++;
+                    setTimeout(type, 40);
+                }
             }
+            type();
         }
 
-        // === 4. CORAZÓN ESTÁTICO (NUNCA SE QUEDA PELÓN) ===
-        function dibujarCorazonEstatico() {
-            const treeZone = document.getElementById('tree-zone');
-            const totalGirasoles = 200; // Suficientes flores para que se vea muy lleno
-            const centerX = treeZone.clientWidth / 2;
-            const centerY = treeZone.clientHeight - 130; // Posición sobre el tronco
-            const scale = 7.5; // Tamaño del corazón
+        function crearCorazonRelleno() {
+            const container = document.getElementById('heart-container');
+            const total = 250; // Más flores para el relleno
+            const centerX = container.clientWidth / 2;
+            const centerY = 160; // Ajustado para las ramas
+            const scale = 7; // Tamaño moderado
 
-            for (let n = 0; n < totalGirasoles; n++) {
-                let t = (n / totalGirasoles) * Math.PI * 2;
-                
-                // Fórmula matemática del corazón
-                let x = 16 * Math.pow(Math.sin(t), 3);
-                let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                
-                let px = centerX + (x * scale);
-                let py = centerY + (y * scale);
+            let flores = [];
+
+            for (let i = 0; i < total; i++) {
+                // Posiciones aleatorias que solo se muestran si están dentro del corazón
+                let x, y, inside = false;
+                while (!inside) {
+                    // Generar punto aleatorio en un cuadrado
+                    let testX = (Math.random() - 0.5) * 35;
+                    let testY = (Math.random() - 0.7) * 35;
+                    
+                    // Ecuación del corazón: (x^2 + y^2 - 1)^3 - x^2 * y^3 <= 0
+                    // Ajustada para relleno
+                    let normX = testX / 14;
+                    let normY = testY / 14;
+                    if (Math.pow(Math.pow(normX, 2) + Math.pow(normY, 2) - 1, 3) - Math.pow(normX, 2) * Math.pow(normY, 3) <= 0) {
+                        x = testX;
+                        y = testY;
+                        inside = true;
+                    }
+                }
 
                 let flower = document.createElement('div');
-                flower.className = 'sunflower static-flower';
-                flower.style.left = px + 'px';
-                flower.style.top = py + 'px';
-                
-                // Rotación aleatoria para naturalidad
-                flower.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg) scale(${0.8 + Math.random() * 0.4})`;
-
-                treeZone.appendChild(flower);
-
-                // Aparecen progresivamente
-                setTimeout(() => {
-                    flower.style.opacity = '1';
-                }, n * 10);
+                flower.className = 'sunflower';
+                flower.style.left = (centerX + x * scale) + 'px';
+                flower.style.top = (centerY + y * scale) + 'px';
+                flower.style.opacity = '0';
+                container.appendChild(flower);
+                flores.push(flower);
             }
+
+            // Aparecen aleatoriamente
+            flores.sort(() => Math.random() - 0.5).forEach((f, idx) => {
+                setTimeout(() => f.style.opacity = '1', idx * 15);
+            });
         }
 
-        // === 5. FLORES CAYENDO INDEPENDIENTES ===
-        function iniciarCaidaFlores() {
-            const treeZone = document.getElementById('tree-zone');
-            const centerX = treeZone.clientWidth / 2;
-            const centerY = treeZone.clientHeight - 130;
-
+        function caidaGirasoles() {
+            const container = document.getElementById('heart-container');
             setInterval(() => {
-                let fallingFlower = document.createElement('div');
-                fallingFlower.className = 'sunflower falling-flower';
+                const flowers = document.querySelectorAll('.sunflower:not(.falling-flower)');
+                if (flowers.length === 0) return;
                 
-                // Nacen de un área aleatoria dentro del corazón
-                let offsetX = (Math.random() - 0.5) * 120;
-                let offsetY = (Math.random() - 0.5) * 80;
+                // Selecciona cualquiera de todo el corazón
+                const source = flowers[Math.floor(Math.random() * flowers.length)];
                 
-                fallingFlower.style.left = (centerX + offsetX) + 'px';
-                fallingFlower.style.top = (centerY + offsetY) + 'px';
+                let falling = document.createElement('div');
+                falling.className = 'sunflower falling-flower';
+                falling.style.left = source.style.left;
+                falling.style.top = source.style.top;
                 
-                let duracion = 3 + Math.random() * 4; // Caen entre 3 y 7 segundos
-                fallingFlower.style.animationDuration = duracion + 's';
-
-                treeZone.appendChild(fallingFlower);
-
-                // Se eliminan al terminar para no saturar la memoria del iPhone
-                setTimeout(() => {
-                    fallingFlower.remove();
-                }, duracion * 1000);
-
-            }, 250); // Cae un girasol nuevo cada 250 milisegundos
+                let dur = 4 + Math.random() * 3;
+                falling.style.animationDuration = dur + 's';
+                
+                container.appendChild(falling);
+                setTimeout(() => falling.remove(), dur * 1000);
+            }, 300);
         }
 
-        // === 6. CONTADOR EXACTO AL FORMATO DEL VIDEO ===
         function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-
-            // Formato exacto a la imagen: "364 días 23 horas 59 minutos 58 segundos _"
-            document.getElementById('timer').innerHTML = 
-                `${days} días ${hours} horas ${minutes} minutos ${seconds} segundos _`;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            document.getElementById('timer').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos`;
         }
-        
-        // Ajuste en caso de redimensionar pantalla
-        window.addEventListener('resize', () => {
-            if(document.getElementById('main-content').style.display === 'flex') {
-                // Borrar estáticas y redibujar si se voltea el celular
-                document.querySelectorAll('.static-flower').forEach(e => e.remove());
-                dibujarCorazonEstatico();
-            }
-        });
     </script>
 </body>
 </html>
