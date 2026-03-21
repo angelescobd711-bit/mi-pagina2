@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Flores Amarillas</title>
     <style>
         * {
@@ -13,12 +13,13 @@
         }
 
         body {
-            width: 100vw;
-            height: 100vh;
             background-color: #f5ebe1;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: #1a1a1a;
-            overflow-x: hidden;
+            /* 100dvh asegura que se vea completo incluso con la barra de Safari */
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
         }
 
         #start-screen {
@@ -45,8 +46,10 @@
             display: none;
             flex-direction: column;
             width: 100%;
-            min-height: 100vh;
-            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex: 1;
+            padding: 5vh 20px 40px 20px; /* Padding inferior para que no se corte el contador */
             opacity: 0;
             animation: fadeIn 1s forwards;
         }
@@ -54,39 +57,45 @@
         @keyframes fadeIn { to { opacity: 1; } }
 
         #text-zone {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             line-height: 1.4;
-            margin-bottom: 20px;
-            height: 120px;
+            min-height: 130px;
+            margin-bottom: 10px;
         }
 
-        /* --- CONTENEDOR ÁRBOL --- */
+        /* --- ZONA DEL ÁRBOL EXACTA --- */
         #tree-zone {
             position: relative;
-            width: 100%;
-            height: 350px;
+            width: 300px;
+            height: 320px;
+            margin: 0 auto;
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin: 20px 0;
         }
 
         .trunk-svg {
             position: absolute;
-            bottom: 20px;
-            width: 120px;
-            height: 180px;
+            bottom: 0;
+            width: 80px;
+            height: 130px;
             z-index: 1;
+        }
+
+        #heart-container {
+            position: absolute;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
         }
 
         .sunflower {
             position: absolute;
-            width: 14px;
-            height: 14px;
+            width: 15px;
+            height: 15px;
             background-color: #fce029;
             border-radius: 50%;
             transform: translate(-50%, -50%);
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: opacity 0.4s ease; /* Transición suave al aparecer */
         }
 
         .sunflower::after {
@@ -102,19 +111,20 @@
 
         .falling-flower {
             z-index: 3;
+            pointer-events: none;
             animation: fallAnimation linear forwards;
         }
 
         @keyframes fallAnimation {
             0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }
-            100% { transform: translate(-50%, 400px) rotate(360deg); opacity: 0; }
+            100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
         /* --- CONTADOR --- */
         #counter-zone {
             width: 100%;
-            padding: 15px 0;
-            margin-top: auto;
+            margin-top: auto; /* Empuja el contador hacia abajo */
+            padding-top: 20px;
         }
 
         .divider-line {
@@ -124,8 +134,17 @@
             margin: 10px 0;
         }
 
-        .counter-title { font-size: 1rem; margin-bottom: 5px; display: block; }
-        #timer { font-size: 1.1rem; font-weight: 500; }
+        .counter-title { 
+            font-size: 1rem; 
+            margin-bottom: 5px; 
+            display: block; 
+        }
+        
+        #timer { 
+            font-size: 1.1rem; 
+            font-weight: 500; 
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
@@ -139,10 +158,10 @@
 
         <div id="tree-zone">
             <svg class="trunk-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M50,100 L50,60 M50,85 L35,65 M50,80 L65,60 M50,70 L40,50 M50,65 L60,45" 
+                <path d="M50,100 L50,50 M50,80 L35,60 M50,75 L65,55 M50,65 L40,45 M50,60 L60,40" 
                 stroke="#6b4226" stroke-width="4" fill="none" stroke-linecap="round"/>
             </svg>
-            <div id="heart-container" style="position: absolute; width: 100%; height: 100%;"></div>
+            <div id="heart-container"></div>
         </div>
 
         <div id="counter-zone">
@@ -154,8 +173,11 @@
     </div>
 
     <script>
+        // Fecha exacta: 1 de Diciembre de 2025
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
         const mensajeTexto = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
+        
+        let staticFlowers = []; // Guardará las flores del corazón para usarlas en la caída
 
         function iniciarExperiencia() {
             document.getElementById('start-screen').style.opacity = '0';
@@ -165,8 +187,11 @@
                 
                 escribirTexto();
                 crearCorazonRelleno();
+                actualizarContador();
                 setInterval(actualizarContador, 1000);
-                setTimeout(caidaGirasoles, 2000);
+                
+                // Las flores caen una vez que el corazón ya está lleno
+                setTimeout(caidaGirasoles, 3500);
             }, 500);
         }
 
@@ -177,7 +202,7 @@
                 if (i < mensajeTexto.length) {
                     zone.innerHTML += mensajeTexto.charAt(i) === '\n' ? '<br>' : mensajeTexto.charAt(i);
                     i++;
-                    setTimeout(type, 40);
+                    setTimeout(type, 45);
                 }
             }
             type();
@@ -185,67 +210,70 @@
 
         function crearCorazonRelleno() {
             const container = document.getElementById('heart-container');
-            const total = 250; // Más flores para el relleno
-            const centerX = container.clientWidth / 2;
-            const centerY = 160; // Ajustado para las ramas
-            const scale = 7; // Tamaño moderado
+            const total = 350; // Cantidad para que se vea lleno
+            
+            // Centro exacto alineado con el tronco
+            const centerX = 150; 
+            const centerY = 110; 
+            const scale = 2.8; // Tamaño ajustado para que no sea inmenso
 
-            let flores = [];
+            let count = 0;
 
-            for (let i = 0; i < total; i++) {
-                // Posiciones aleatorias que solo se muestran si están dentro del corazón
-                let x, y, inside = false;
-                while (!inside) {
-                    // Generar punto aleatorio en un cuadrado
-                    let testX = (Math.random() - 0.5) * 35;
-                    let testY = (Math.random() - 0.7) * 35;
+            // Relleno matemático exacto del área de un corazón
+            while(count < total) {
+                let x = (Math.random() - 0.5) * 3; // Coordenada X entre -1.5 y 1.5
+                let y = (Math.random() - 0.5) * 3; // Coordenada Y entre -1.5 y 1.5
+
+                // Inecuación del corazón relleno: (x^2 + y^2 - 1)^3 - x^2 * y^3 <= 0
+                if (Math.pow(x*x + y*y - 1, 3) - x*x * Math.pow(y, 3) <= 0) {
                     
-                    // Ecuación del corazón: (x^2 + y^2 - 1)^3 - x^2 * y^3 <= 0
-                    // Ajustada para relleno
-                    let normX = testX / 14;
-                    let normY = testY / 14;
-                    if (Math.pow(Math.pow(normX, 2) + Math.pow(normY, 2) - 1, 3) - Math.pow(normX, 2) * Math.pow(normY, 3) <= 0) {
-                        x = testX;
-                        y = testY;
-                        inside = true;
-                    }
-                }
+                    let px = centerX + x * 30 * scale;
+                    let py = centerY - y * 30 * scale; // Invertimos Y porque en pantallas Y crece hacia abajo
 
-                let flower = document.createElement('div');
-                flower.className = 'sunflower';
-                flower.style.left = (centerX + x * scale) + 'px';
-                flower.style.top = (centerY + y * scale) + 'px';
-                flower.style.opacity = '0';
-                container.appendChild(flower);
-                flores.push(flower);
+                    let flower = document.createElement('div');
+                    flower.className = 'sunflower';
+                    flower.style.left = px + 'px';
+                    flower.style.top = py + 'px';
+                    flower.style.opacity = '0'; // Nacen invisibles
+                    
+                    container.appendChild(flower);
+                    staticFlowers.push(flower);
+                    count++;
+                }
             }
 
-            // Aparecen aleatoriamente
-            flores.sort(() => Math.random() - 0.5).forEach((f, idx) => {
-                setTimeout(() => f.style.opacity = '1', idx * 15);
+            // Mezclar el array para que aparezcan en orden aleatorio (no consecutivamente)
+            staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
+                setTimeout(() => {
+                    f.style.opacity = '1';
+                }, idx * 8); // Aparece una nueva flor cada 8 milisegundos aleatoriamente
             });
         }
 
         function caidaGirasoles() {
             const container = document.getElementById('heart-container');
+            
             setInterval(() => {
-                const flowers = document.querySelectorAll('.sunflower:not(.falling-flower)');
-                if (flowers.length === 0) return;
+                if (staticFlowers.length === 0) return;
                 
-                // Selecciona cualquiera de todo el corazón
-                const source = flowers[Math.floor(Math.random() * flowers.length)];
+                // Elegir una flor estática completamente al azar (de cualquier parte del corazón)
+                const sourceFlower = staticFlowers[Math.floor(Math.random() * staticFlowers.length)];
                 
                 let falling = document.createElement('div');
                 falling.className = 'sunflower falling-flower';
-                falling.style.left = source.style.left;
-                falling.style.top = source.style.top;
+                // Copiar la posición exacta de la flor elegida
+                falling.style.left = sourceFlower.style.left;
+                falling.style.top = sourceFlower.style.top;
                 
-                let dur = 4 + Math.random() * 3;
+                let dur = 3 + Math.random() * 3; // Caída aleatoria entre 3 y 6 segundos
                 falling.style.animationDuration = dur + 's';
                 
                 container.appendChild(falling);
-                setTimeout(() => falling.remove(), dur * 1000);
-            }, 300);
+                
+                setTimeout(() => {
+                    falling.remove();
+                }, dur * 1000);
+            }, 300); // Tira una flor cada 300ms
         }
 
         function actualizarContador() {
@@ -255,7 +283,8 @@
             const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const m = Math.floor((diff / (1000 * 60)) % 60);
             const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('timer').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos`;
+            
+            document.getElementById('timer').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos _`;
         }
     </script>
 </body>
