@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL === */
+        /* === PANTALLA DE BOTÓN INICIAL (BLOQUEADO) === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +71,7 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Texto superior */
+        /* Texto superior (BLOQUEADO) */
         #text-zone {
             font-size: 1.15rem;
             line-height: 1.4;
@@ -87,7 +87,7 @@
 
         @keyframes blinker { 50% { opacity: 0; } }
 
-        /* === ZONA DEL ÁRBOL === */
+        /* === ZONA DEL ÁRBOL (BLOQUEADO) === */
         #tree-zone {
             position: relative;
             width: 300px;
@@ -95,18 +95,18 @@
             margin: 0 auto;
         }
 
-        /* Tronco Intacto y Centrado al 100% */
+        /* Tronco Centrado (BLOQUEADO) */
         .trunk-svg {
             position: absolute;
             bottom: 10px;
             left: 50%;
-            transform: translateX(-50%); /* Centrado garantizado */
+            transform: translateX(-50%); 
             width: 140px;
             height: 150px;
             z-index: 1;
         }
 
-        /* Contenedor del Corazón */
+        /* Contenedor del Corazón (BLOQUEADO) */
         #heart-container {
             position: absolute;
             top: 0; left: 0; 
@@ -114,7 +114,7 @@
             z-index: 2;
         }
 
-        /* Girasoles Individuales Estilo 🌼 */
+        /* Girasoles Individuales (BLOQUEADO) */
         .sunflower {
             position: absolute;
             width: 16px; 
@@ -147,7 +147,7 @@
             z-index: 2;
         }
 
-        /* Animación de caída */
+        /* Animación de caída (BLOQUEADO) */
         .falling-flower {
             z-index: 3;
             pointer-events: none;
@@ -159,7 +159,40 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === CONTADOR === */
+        /* === NUEVO: ZONA DE PASTO CON MOVIMIENTO === */
+        #grass-zone {
+            position: relative;
+            width: 300px;
+            height: 30px; /* Altura del pasto */
+            margin: -5px auto 10px auto; /* Lo pega un poco al árbol */
+            overflow: hidden; /* Corta lo que sobresale de la base */
+            display: flex;
+            align-items: flex-end; /* Pasto sale de abajo */
+            justify-content: center;
+        }
+
+        .grass-blade {
+            width: 3px;
+            height: 20px; /* Altura base, se variará con JS */
+            background-color: #7cb342; /* Verde base orgánico */
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin: 0 1px; /* Espacio entre hojas */
+            transform-origin: bottom center; /* Balanceo desde la base */
+            animation: windSway 4s ease-in-out infinite;
+        }
+
+        /* Variaciones de color para naturalidad */
+        .grass-blade:nth-child(even) { background-color: #8bc34a; }
+        .grass-blade:nth-child(3n) { background-color: #9ccc65; }
+
+        /* Animación de balanceo suave (viento) */
+        @keyframes windSway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg); } /* Inclinación hacia la derecha */
+        }
+
+        /* === CONTADOR (BLOQUEADO) === */
         #counter-zone {
             width: 100%;
             margin-top: auto; 
@@ -194,6 +227,8 @@
             <div id="heart-container"></div>
         </div>
 
+        <div id="grass-zone"></div>
+
         <div id="counter-zone">
             <div class="divider-line"></div>
             <span class="counter-title">Mi amor por ti comenzó hace...</span>
@@ -217,6 +252,7 @@
                 
                 typeWriterText();
                 drawHeart(); 
+                createGrass(); // Genera el pasto al iniciar
                 
                 setTimeout(startFallingFlowers, 3500); 
                 
@@ -239,18 +275,15 @@
             }
         }
 
-        // === SILUETA PERFECTA, CENTRADA Y TEXTURIZADA ===
+        // === DIBUJAR CORAZÓN (BLOQUEADO) ===
         function drawHeart() {
             const container = document.getElementById('heart-container');
-            
-            // CORRECCIÓN DE ALINEACIÓN: 
-            // Se movió de 150 a 138 (12px = ~1 girasol a la izquierda) para compensar el peso visual del panal.
             const centerX = 138; 
             const centerY = 135; 
             const scaleX = 78; 
             const scaleY = 82; 
             
-            const step = 0.15; // Distancia entre girasoles
+            const step = 0.15;
             const rowSpacing = step * 0.866; 
 
             let row = 0;
@@ -259,12 +292,9 @@
                 let offsetX = (row % 2 === 0) ? 0 : step / 2;
                 
                 for (let x = -1.5; x <= 1.5; x += step) {
-                    
-                    // CORRECCIÓN DEL DESFASE: Se resta (step / 4) para alinear al centro exacto
                     let jx = x + offsetX - (step / 4);
                     let jy = y;
 
-                    // Silueta matemática exacta
                     if (Math.pow(jx*jx + jy*jy - 1, 3) - jx*jx * Math.pow(jy, 3) <= 0) {
                         
                         let px = centerX + jx * scaleX;
@@ -275,8 +305,7 @@
                         flower.style.left = px + 'px';
                         flower.style.top = py + 'px';
                         
-                        // MAGIA AQUÍ: Rotación aleatoria + Escala aleatoria para lograr textura orgánica y suave
-                        let randomScale = 0.75 + Math.random() * 0.5; // Tamaños variados (unos grandes, unos pequeños)
+                        let randomScale = 0.75 + Math.random() * 0.5;
                         let randomRotate = Math.random() * 360;
                         flower.style.transform = `translate(-50%, -50%) rotate(${randomRotate}deg) scale(${randomScale})`;
                         flower.style.opacity = '0'; 
@@ -288,7 +317,6 @@
                 row++;
             }
 
-            // Animación de aparición
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
@@ -296,6 +324,29 @@
             });
         }
 
+        // === NUEVO: LÓGICA PARA GENERAR PASTO ORGÁNICO ===
+        function createGrass() {
+            const container = document.getElementById('grass-zone');
+            const numBlades = 60; // Cantidad de hojas de pasto
+
+            for (let i = 0; i < numBlades; i++) {
+                let blade = document.createElement('div');
+                blade.className = 'grass-blade';
+                
+                // Variaciones orgánicas aleatorias
+                let randomHeight = 15 + Math.random() * 15; // Alturas entre 15px y 30px
+                let randomDelay = Math.random() * 4; // Retraso de animación para que no se muevan todas igual
+                let randomDuration = 3 + Math.random() * 2; // Velocidad del viento variada
+
+                blade.style.height = randomHeight + 'px';
+                blade.style.animationDelay = randomDelay + 's';
+                blade.style.animationDuration = randomDuration + 's';
+
+                container.appendChild(blade);
+            }
+        }
+
+        // === CAÍDA GIRASOLES (BLOQUEADO) ===
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
@@ -320,6 +371,7 @@
             }, 300); 
         }
 
+        // === RELOJ (BLOQUEADO) ===
         function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
