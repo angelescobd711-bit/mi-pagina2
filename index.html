@@ -76,7 +76,7 @@
             margin-bottom: 10px;
         }
 
-        /* --- ZONA DEL ÁRBOL --- */
+        /* --- ZONA DEL ÁRBOL CORREGIDA Y ALINEADA --- */
         #tree-zone {
             position: relative;
             width: 300px;
@@ -86,7 +86,7 @@
             justify-content: center;
         }
 
-        /* Tronco orgánico curvo */
+        /* SVG de Ramas delgadas, curvas y orgánicas que "sostienen" */
         .trunk-svg {
             position: absolute;
             bottom: 0;
@@ -95,6 +95,7 @@
             z-index: 1;
         }
 
+        /* Contenedor del Corazón bajado para alineación */
         #heart-container {
             position: absolute;
             top: 0; left: 0; 
@@ -102,7 +103,7 @@
             z-index: 2;
         }
 
-        /* --- FORMA DE GIRASOL (ESTILO EMOJI 🌼) --- */
+        /* --- FORMA DE GIRASOL MEJORADA (ESTILO EMOJI 🌼) --- */
         .sunflower {
             position: absolute;
             width: 14px; 
@@ -240,31 +241,31 @@
             type();
         }
 
+        // === LÓGICA DE RELLENO ALEATORIO Y PERFECTO ===
         function crearCorazonRelleno() {
             const container = document.getElementById('heart-container');
-            const total = 450; // Mayor densidad
+            const total = 380; // Cantidad ideal para rellenar sin saturar
             
             const centerX = 150; 
-            const centerY = 110; 
-            const scale = 75; // Misma escala en X y Y para que el corazón sea perfecto
+            const centerY = 110; // Posición bajada para alineación
+            const scale = 75; // Escala perfecta para que el corazón no sea inmenso
 
             let count = 0;
 
-            // Lógica matemática
+            // Rejection Sampling para relleno aleatorio perfecto del área
             while(count < total) {
-                // Generar puntos aleatorios en el plano
                 let x = (Math.random() - 0.5) * 3; 
                 let y = (Math.random() - 0.5) * 3; 
 
-                // Si el punto cae dentro del corazón matemático, lo dibujamos
+                // Inecuación matemática del corazón relleno
                 if (Math.pow(x*x + y*y - 1, 3) - x*x * Math.pow(y, 3) <= 0) {
                     
                     let px = centerX + x * scale;
-                    let py = centerY - y * scale; // Y se invierte porque en web hacia abajo es positivo
+                    let py = centerY - y * scale; // Invertimos Y para pantalla
 
                     let flower = document.createElement('div');
                     flower.className = 'sunflower';
-                    // Usamos transform para centrar exactamente el girasol en la coordenada
+                    // Usamos transform para centrar el girasol en la coordenada exacta
                     flower.style.left = px + 'px';
                     flower.style.top = py + 'px';
                     // Rotación base aleatoria para que se vean desordenados naturalmente
@@ -277,7 +278,7 @@
                 }
             }
 
-            // Desordenamos el array para que nazcan saltados y no en línea
+            // Desordenamos el array para que nazcan saltados y no en línea consecutiva
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
@@ -285,6 +286,7 @@
             });
         }
 
+        // Lógica de caída que selecciona de todo el corazón lleno
         function caidaGirasoles() {
             const container = document.getElementById('heart-container');
             
