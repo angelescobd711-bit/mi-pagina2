@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Flores Amarillas</title>
     <style>
-        /* === RESET Y BLOQUEO DE ZOOM PARA IPHONE === */
+        /* === RESET Y BLOQUEO DE ZOOM PARA MÓVILES === */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,7 +14,7 @@
         }
 
         body {
-            background-color: #f5ebe1; /* Color crema exacto del video */
+            background-color: #f5ebe1; /* Color crema de fondo */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: #1a1a1a;
             /* 100dvh asegura que se vea completo incluso con la barra de Safari */
@@ -24,7 +24,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL (Restaurada al diseño original) === */
+        /* === PANTALLA DE BOTÓN INICIAL (Diseño original) === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -38,7 +38,7 @@
             cursor: pointer;
         }
 
-        .sunflower-btn {
+        .sunflower-icon {
             font-size: 80px;
             animation: pulse 2s infinite;
         }
@@ -62,7 +62,7 @@
             display: none;
             flex-direction: column;
             width: 100%;
-            max-width: 500px; /* Limitar ancho en iPad */
+            max-width: 500px; /* Ancho ideal para móviles/tablets */
             margin: 0 auto;
             flex: 1;
             padding: 5vh 20px 40px 20px;
@@ -80,7 +80,7 @@
             margin-bottom: 10px;
         }
 
-        /* Texto parpadeante "I Love You!" */
+        /* Texto parpadeante final "I Love You!" */
         .blinking {
             font-weight: bold;
             display: inline-block;
@@ -89,7 +89,7 @@
 
         @keyframes blinker { 50% { opacity: 0; } }
 
-        /* === ZONA DEL ÁRBOL EXACTA Y ALINEADA === */
+        /* === ZONA DEL ÁRBOL EXACTA Y ALINEADA (SOLUCIÓN) === */
         #tree-zone {
             position: relative;
             width: 300px;
@@ -108,7 +108,7 @@
             z-index: 1;
         }
 
-        /* Contenedor del Corazón de girasoles (Nivelado para alineación) */
+        /* Contenedor del Corazón de girasoles (Alineado matemáticamente) */
         #heart-container {
             position: absolute;
             top: 0; left: 0; 
@@ -184,7 +184,7 @@
 <body>
 
     <div id="start-screen" onclick="iniciarExperiencia()">
-        <div class="sunflower-btn">🌻</div>
+        <div class="sunflower-icon">🌻</div>
         <div class="click-text">Flores Para Ti</div>
     </div>
 
@@ -217,7 +217,7 @@
         const message = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
 
         let charIndex = 0;
-        let staticFlowers = []; // Guardará las flores estáticas
+        let staticFlowers = []; // Guardará las flores estáticas para usarlas en la caída
 
         function iniciarExperiencia() {
             document.getElementById('start-screen').style.opacity = '0';
@@ -236,11 +236,11 @@
             }, 500);
         }
 
-        // 1. Escritura Automática
+        // 1. Efecto de Escritura Automática
         function typeWriterText() {
             if (charIndex < message.length) {
                 const char = message.charAt(charIndex);
-                // Si es la frase final parpadeante
+                // Si es la frase final parpadeante "I Love You!"
                 if (message.substring(charIndex, charIndex + 17) === "— I Love You! —") {
                     document.getElementById('text-zone').innerHTML += '<span class="blinking">I Love You!</span>';
                     charIndex += 17;
@@ -252,18 +252,18 @@
             }
         }
 
-        // 2. Dibujar Corazón Lleno (Silueta Perfecta, Relleno Completo Aleatorio)
+        // 2. Dibujar Corazón Lleno (Solución al Relleno Aleatorio y Perfecto)
         function drawHeart() {
             const container = document.getElementById('heart-container');
-            const numGirasoles = 300; // Suficientes flores para el relleno
+            const numGirasoles = 300; // Suficientes flores para el relleno completo
             
             const centerX = 150; 
-            const centerY = 110; // Posición bajada para alineación
+            const centerY = 110; // Posición bajada matemáticamente para alineación sobre ramas
             const scale = 70; // Escala ideal para silueta perfecta
 
             let count = 0;
 
-            // Rejection Sampling para relleno aleatorio perfecto del área
+            // Rejection Sampling para relleno aleatorio perfecto del área del corazón
             while(count < numGirasoles) {
                 // Generar puntos aleatorios en el plano
                 let x = (Math.random() - 0.5) * 3; 
@@ -290,15 +290,15 @@
                 }
             }
 
-            // Desordenamos el array para que nazcan saltados y no en línea consecutiva
+            // Desordenamos el array para que nazcan saltados y aleatorios, no en línea consecutiva
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
-                }, idx * 6); // Velocidad de aparición
+                }, idx * 6); // Velocidad de aparición progresiva aleatoria
             });
         }
 
-        // 3. Iniciar Caída de Flores (Selecciona de todo el corazón lleno)
+        // 3. Iniciar Caída de Girasoles (Solución a la Caída Global)
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
