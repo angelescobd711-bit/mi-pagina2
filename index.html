@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL === */
+        /* === PANTALLA DE BOTÓN INICIAL (Intacta) === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +71,7 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Texto superior */
+        /* Texto superior con efecto de escritura (Intacto) */
         #text-zone {
             font-size: 1.15rem;
             line-height: 1.4;
@@ -97,7 +97,7 @@
             justify-content: center;
         }
 
-        /* Tronco de árbol que dejaste como base */
+        /* Tronco de árbol INTACTO (Base Intocable) */
         .trunk-svg {
             position: absolute;
             bottom: 10px;
@@ -147,7 +147,7 @@
             z-index: 2;
         }
 
-        /* Animación de caída */
+        /* Animación de caída de girasoles (Intacta) */
         .falling-flower {
             z-index: 3;
             pointer-events: none;
@@ -159,7 +159,7 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === CONTADOR === */
+        /* === CONTADOR (Intacto) === */
         #counter-zone {
             width: 100%;
             margin-top: auto; 
@@ -244,8 +244,8 @@
         function drawHeart() {
             const container = document.getElementById('heart-container');
             const centerX = 150; 
-            const centerY = 145; // Alineación con tu tronco base
-            const scale = 75; // Escala para la silueta
+            const centerY = 145; // Alineación con tu tronco base (Intacta)
+            const scale = 75; // Escala para la silueta (Intacta)
             const step = 0.18; // Distancia exacta entre girasoles
 
             let row = 0;
@@ -260,7 +260,7 @@
                     let jx = x + offsetX;
                     let jy = y;
 
-                    // Verificamos si la posición exacta está dentro de la silueta del corazón
+                    // Verificamos si la posición exacta está dentro de la silueta del corazón (Mathematical check)
                     if (Math.pow(jx*jx + jy*jy - 1, 3) - jx*jx * Math.pow(jy, 3) <= 0) {
                         
                         let px = centerX + jx * scale;
@@ -281,7 +281,7 @@
                 row++;
             }
 
-            // Hacemos que aparezcan en desorden para mantener la magia de la animación
+            // Hacemos que aparezcan en desorden para mantener la magia de la animación (Intacta)
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
