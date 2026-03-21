@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL (BLOQUEADO) === */
+        /* === PANTALLA DE BOTÓN INICIAL === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +71,7 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Texto superior (BLOQUEADO) */
+        /* Texto superior */
         #text-zone {
             font-size: 1.15rem;
             line-height: 1.4;
@@ -87,7 +87,7 @@
 
         @keyframes blinker { 50% { opacity: 0; } }
 
-        /* === ZONA DEL ÁRBOL (BLOQUEADO) === */
+        /* === ZONA DEL ÁRBOL === */
         #tree-zone {
             position: relative;
             width: 300px;
@@ -95,7 +95,7 @@
             margin: 0 auto;
         }
 
-        /* Tronco Centrado (BLOQUEADO) */
+        /* Tronco Centrado */
         .trunk-svg {
             position: absolute;
             bottom: 10px;
@@ -106,7 +106,7 @@
             z-index: 1;
         }
 
-        /* Contenedor del Corazón (BLOQUEADO) */
+        /* Contenedor del Corazón */
         #heart-container {
             position: absolute;
             top: 0; left: 0; 
@@ -114,7 +114,7 @@
             z-index: 2;
         }
 
-        /* Girasoles Individuales (BLOQUEADO) */
+        /* Girasoles Individuales */
         .sunflower {
             position: absolute;
             width: 16px; 
@@ -147,7 +147,7 @@
             z-index: 2;
         }
 
-        /* Animación de caída (BLOQUEADO) */
+        /* Animación de caída */
         .falling-flower {
             z-index: 3;
             pointer-events: none;
@@ -159,40 +159,40 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === NUEVO: ZONA DE PASTO CON MOVIMIENTO === */
+        /* === ZONA DE PASTO CON MOVIMIENTO === */
         #grass-zone {
             position: relative;
             width: 300px;
-            height: 30px; /* Altura del pasto */
-            margin: -5px auto 10px auto; /* Lo pega un poco al árbol */
-            overflow: hidden; /* Corta lo que sobresale de la base */
+            height: 30px; 
+            /* Margen negativo para subir el pasto justo a la base del tronco */
+            margin: -40px auto 10px auto; 
+            z-index: 4; /* Lo coloca por delante del tronco */
+            overflow: hidden; 
             display: flex;
-            align-items: flex-end; /* Pasto sale de abajo */
+            align-items: flex-end; 
             justify-content: center;
         }
 
         .grass-blade {
             width: 3px;
-            height: 20px; /* Altura base, se variará con JS */
-            background-color: #7cb342; /* Verde base orgánico */
+            height: 20px; 
+            background-color: #7cb342; 
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
-            margin: 0 1px; /* Espacio entre hojas */
-            transform-origin: bottom center; /* Balanceo desde la base */
+            margin: 0 1px; 
+            transform-origin: bottom center; 
             animation: windSway 4s ease-in-out infinite;
         }
 
-        /* Variaciones de color para naturalidad */
         .grass-blade:nth-child(even) { background-color: #8bc34a; }
         .grass-blade:nth-child(3n) { background-color: #9ccc65; }
 
-        /* Animación de balanceo suave (viento) */
         @keyframes windSway {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(15deg); } /* Inclinación hacia la derecha */
+            50% { transform: rotate(15deg); } 
         }
 
-        /* === CONTADOR (BLOQUEADO) === */
+        /* === CONTADOR === */
         #counter-zone {
             width: 100%;
             margin-top: auto; 
@@ -252,7 +252,7 @@
                 
                 typeWriterText();
                 drawHeart(); 
-                createGrass(); // Genera el pasto al iniciar
+                createGrass(); 
                 
                 setTimeout(startFallingFlowers, 3500); 
                 
@@ -275,7 +275,6 @@
             }
         }
 
-        // === DIBUJAR CORAZÓN (BLOQUEADO) ===
         function drawHeart() {
             const container = document.getElementById('heart-container');
             const centerX = 138; 
@@ -324,19 +323,17 @@
             });
         }
 
-        // === NUEVO: LÓGICA PARA GENERAR PASTO ORGÁNICO ===
         function createGrass() {
             const container = document.getElementById('grass-zone');
-            const numBlades = 60; // Cantidad de hojas de pasto
+            const numBlades = 60; 
 
             for (let i = 0; i < numBlades; i++) {
                 let blade = document.createElement('div');
                 blade.className = 'grass-blade';
                 
-                // Variaciones orgánicas aleatorias
-                let randomHeight = 15 + Math.random() * 15; // Alturas entre 15px y 30px
-                let randomDelay = Math.random() * 4; // Retraso de animación para que no se muevan todas igual
-                let randomDuration = 3 + Math.random() * 2; // Velocidad del viento variada
+                let randomHeight = 15 + Math.random() * 15; 
+                let randomDelay = Math.random() * 4; 
+                let randomDuration = 3 + Math.random() * 2; 
 
                 blade.style.height = randomHeight + 'px';
                 blade.style.animationDelay = randomDelay + 's';
@@ -346,7 +343,6 @@
             }
         }
 
-        // === CAÍDA GIRASOLES (BLOQUEADO) ===
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
@@ -371,7 +367,6 @@
             }, 300); 
         }
 
-        // === RELOJ (BLOQUEADO) ===
         function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
