@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Flores Amarillas</title>
     <style>
-        /* === RESET Y BLOQUEO DE ZOOM PARA IPHONE === */
+        /* === RESET Y BLOQUEO DE ZOOM === */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL (Intacta) === */
+        /* === PANTALLA DE BOTÓN INICIAL === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +71,7 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Texto superior con efecto de escritura (Intacto) */
+        /* Texto superior */
         #text-zone {
             font-size: 1.15rem;
             line-height: 1.4;
@@ -93,14 +93,14 @@
             width: 300px;
             height: 350px;
             margin: 0 auto;
-            display: flex;
-            justify-content: center;
         }
 
-        /* Tronco de árbol INTACTO (Base Intocable) */
+        /* Tronco Intacto y Centrado al 100% */
         .trunk-svg {
             position: absolute;
             bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%); /* Centrado garantizado */
             width: 140px;
             height: 150px;
             z-index: 1;
@@ -117,8 +117,8 @@
         /* Girasoles Individuales Estilo 🌼 */
         .sunflower {
             position: absolute;
-            width: 15px; /* Tamaño delicado para no verse abrumado */
-            height: 15px;
+            width: 16px; 
+            height: 16px;
             background-color: #fce029; 
             border-radius: 4px; 
             box-shadow: 0 1px 2px rgba(0,0,0,0.15);
@@ -140,14 +140,14 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 6px; /* Centro más pequeño para que la vista descanse */
-            height: 6px;
+            width: 6.5px; 
+            height: 6.5px;
             background-color: #4a2e1b;
             border-radius: 50%;
             z-index: 2;
         }
 
-        /* Animación de caída de girasoles (Intacta) */
+        /* Animación de caída */
         .falling-flower {
             z-index: 3;
             pointer-events: none;
@@ -159,7 +159,7 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === CONTADOR (Intacto) === */
+        /* === CONTADOR === */
         #counter-zone {
             width: 100%;
             margin-top: auto; 
@@ -216,7 +216,7 @@
                 document.getElementById('main-content').style.display = 'flex';
                 
                 typeWriterText();
-                drawHeart(); // Llama a la nueva función de silueta perfecta
+                drawHeart(); 
                 
                 setTimeout(startFallingFlowers, 3500); 
                 
@@ -239,34 +239,29 @@
             }
         }
 
-        // === SILUETA PERFECTA Y EQUILIBRADA ===
+        // === SILUETA PERFECTA, CENTRADA Y TEXTURIZADA ===
         function drawHeart() {
             const container = document.getElementById('heart-container');
             const centerX = 150; 
             const centerY = 135; 
-            
-            // Escala ajustada para dar la forma de corazón clásica (más alta que ancha)
             const scaleX = 78; 
             const scaleY = 82; 
             
-            // Distancia entre girasoles (step). 
-            const step = 0.16; 
-            // Esto es magia matemática: crea una cuadrícula de hexágonos (panal)
+            const step = 0.15; // Distancia entre girasoles
             const rowSpacing = step * 0.866; 
 
             let row = 0;
 
-            // Recorremos matemáticamente el espacio
             for (let y = -1.5; y <= 1.5; y += rowSpacing) {
-                // Intercalamos cada fila para crear el patrón de panal
                 let offsetX = (row % 2 === 0) ? 0 : step / 2;
                 
                 for (let x = -1.5; x <= 1.5; x += step) {
                     
-                    let jx = x + offsetX;
+                    // CORRECCIÓN DEL DESFASE: Se resta (step / 4) para alinear al centro exacto
+                    let jx = x + offsetX - (step / 4);
                     let jy = y;
 
-                    // Condición matemática de la silueta perfecta del corazón
+                    // Silueta matemática exacta
                     if (Math.pow(jx*jx + jy*jy - 1, 3) - jx*jx * Math.pow(jy, 3) <= 0) {
                         
                         let px = centerX + jx * scaleX;
@@ -276,8 +271,11 @@
                         flower.className = 'sunflower';
                         flower.style.left = px + 'px';
                         flower.style.top = py + 'px';
-                        // Pequeña rotación individual para que el interior no parezca cuadrado
-                        flower.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 90}deg)`;
+                        
+                        // MAGIA AQUÍ: Rotación aleatoria + Escala aleatoria para lograr textura orgánica y suave
+                        let randomScale = 0.75 + Math.random() * 0.5; // Tamaños variados (unos grandes, unos pequeños)
+                        let randomRotate = Math.random() * 360;
+                        flower.style.transform = `translate(-50%, -50%) rotate(${randomRotate}deg) scale(${randomScale})`;
                         flower.style.opacity = '0'; 
                         
                         container.appendChild(flower);
@@ -287,7 +285,7 @@
                 row++;
             }
 
-            // Hacemos que aparezcan en desorden para mantener la animación
+            // Animación de aparición
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
                 setTimeout(() => {
                     f.style.opacity = '1';
