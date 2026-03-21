@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores Para Ti</title>
+    <style>
+        :root {
+            --bg-color: #f8ede3;
+            --text-color: #5d4037;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #click-me {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        #click-me:hover { transform: scale(1.1); }
+
+        .hidden { display: none; }
+
+        .message-container {
+            max-width: 90%;
+            margin-bottom: 20px;
+        }
+
+        .typewriter {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .tree-container img {
+            width: 250px;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        .counter {
+            font-size: 0.9rem;
+            color: #795548;
+            margin-top: 20px;
+            border-top: 1px solid #d7ccc8;
+            padding-top: 10px;
+        }
+
+        .time-unit { font-weight: bold; color: #8d6e63; }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <div id="click-me">
+            <span style="font-size: 50px;">🌻</span>
+            <p style="color: #8d6e63; border-bottom: 2px solid;">Flores Para Ti</p>
+        </div>
+    </div>
+
+    <div id="main-content" class="hidden">
+        <div class="message-container">
+            <p class="typewriter" id="text-msg"></p>
+        </div>
+
+        <div class="tree-container">
+            <img src="https://cdn-icons-png.flaticon.com/512/346/346200.png" alt="Árbol" id="tree-img">
+        </div>
+
+        <div class="counter" id="timer">
+            Mi amor por ti comenzó hace...<br>
+            <span id="countdown">00 días 00 horas 00 minutos 00 segundos</span>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('click-me');
+        const startScreen = document.getElementById('start-screen');
+        const mainContent = document.getElementById('main-content');
+        const textElement = document.getElementById('text-msg');
+
+        const message = "Flores Amarillas para el amor de mi vida:\nSi pudiera elegir un lugar seguro, sería a tu lado. Cuanto más tiempo estoy contigo más te amo. — I Love You! —";
+
+        // Fecha de inicio (Ajusta esta fecha a cuando empezaron)
+        const startDate = new Date('2025-03-21T00:00:00'); 
+
+        btn.addEventListener('click', () => {
+            startScreen.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            typeWriter(0);
+            startTimer();
+        });
+
+        function typeWriter(i) {
+            if (i < message.length) {
+                textElement.innerHTML += message.charAt(i) === '\n' ? '<br>' : message.charAt(i);
+                setTimeout(() => typeWriter(i + 1), 50);
+            }
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - startDate;
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('countdown').innerHTML = 
+                    `${days} días ${hours} horas ${minutes} minutos ${seconds} segundos`;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
