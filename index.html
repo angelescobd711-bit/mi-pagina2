@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Flores Para Ti</title>
+    <style>
+        :root {
+            --bg-color: #fcf6f0;
+            --text-color: #5d4037;
+            --accent-yellow: #fbc02d;
+            --sunflower-color: #fdd835;
+            --stem-color: #a1887f;
+        }
+
+        /* Bloqueo de zoom y overscroll en móviles */
+        html, body {
+            touch-action: none;
+            overscroll-behavior: none;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Pantalla de Inicio (Botón Inicial) */
+        #start-screen {
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+            z-index: 10;
+        }
+
+        .sunflower-btn {
+            font-size: 80px;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+        }
+
+        .sunflower-btn:active { transform: scale(0.9); }
+
+        .click-text {
+            color: var(--text-color);
+            margin-top: 15px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--accent-yellow);
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        /* Contenido Principal (Texto y Árbol Animado) */
+        #main-content {
+            display: none; /* Se oculta al inicio */
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Contenedor del Texto (Escritura Automática) */
+        .message-container {
+            width: 100%;
+            height: 180px; /* Altura fija para evitar saltos */
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 10px;
+        }
+
+        .typewriter {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            line-height: 1.5;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        /* === ÁRBOL DE GIRASOLES ANIMADO === */
+        .tree-viewport {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto;
+            overflow: visible; /* Importante para que los girasoles caigan fuera */
+        }
+
+        /* Tronco y Ramas (SVG para fidelidad) */
+        .tree-structure {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Contenedor para el corazón de girasoles */
+        #sunflower-heart {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* Girasoles Individuales */
+        .sunflower {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--sunflower-color);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            opacity: 0; /* Empiezan ocultos para la animación de 'crecimiento' */
+            transition: opacity 0.3s ease-in;
+        }
+
+        /* El centro oscuro del girasol */
+        .sunflower::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 50%;
+            background-color: #5d4037;
+            border-radius: 50%;
+        }
+
+        /* Animación de los Girasoles Cayendo */
+        @keyframes fallAndGather {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            80% { opacity: 1; }
+            100% {
+                transform: translateY(350px) translateX(var(--random-x, 0px)) rotate(var(--random-rot, 360deg));
+                opacity: 0; /* Se desvanecen al llegar abajo para que no se acumulen infinitamente en pantalla */
+            }
+        }
+
+        .sunflower.falling {
+            animation: fallAndGather var(--fall-duration, 5s) linear forwards;
+            animation-delay: var(--fall-delay, 0s);
+        }
+
+        /* === CONTADOR DE TIEMPO === */
+        .counter-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            width: 90%;
+            border: 1px solid #f2e1d5;
+            z-index: 5;
+        }
+
+        .counter-label {
+            font-size: 0.85rem;
+            color: #8d6e63;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        #countdown {
+            font-variant-numeric: tabular-nums;
+            font-weight: bold;
+            color: #5d4037;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animaciones Globales */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <div class="sunflower-btn" onclick="startExperience()">🌻</div>
+        <br>
+        <div class="click-text">Flores Para Ti</div>
+    </div>
+
+    <div id="main-content">
+        <div class="message-container">
+            <div class="typewriter" id="text-msg"></div>
+        </div>
+
+        <div class="tree-viewport">
+            <svg class="tree-structure" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax meet">
+                <path d="M50 95 C 48 80, 48 60, 50 40" stroke="#a1887f" stroke-width="3" fill="none"/>
+                <path d="M50 70 C 40 65, 30 55, 30 45" stroke="#a1887f" stroke-width="2" fill="none"/>
+                <path d="M50 70 C 60 65, 70 55, 70 45" stroke="#a1887f" stroke-width="2" fill="none"/>
+                <path d="M50 55 C 45 50, 40 40, 45 30" stroke="#a1887f" stroke-width="1.5" fill="none"/>
+                <path d="M50 55 C 55 50, 60 40, 55 30" stroke="#a1887f" stroke-width="1.5" fill="none"/>
+            </svg>
+            
+            <div id="sunflower-heart"></div>
+        </div>
+
+        <div class="counter-box">
+            <span class="counter-label">Mi amor por ti comenzó hace...</span>
+            <div id="countdown">Cargando...</div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURACIÓN DE FECHA ---
+        // Pon aquí la fecha en que se conocieron o empezaron (Año, Mes-1, Día)
+        // Ejemplo: 21 de Marzo de 2025 -> new Date(2025, 2, 21)
+        const startDate = new Date(2025, 2, 21, 0, 0, 0); 
+        
+        const messageText = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
+
+        let fallInterval; // Variable para controlar el intervalo de caída
+
+        function startExperience() {
+            document.getElementById('start-screen').classList.add('hidden');
+            const main = document.getElementById('main-content');
+            main.style.display = 'flex';
+            
+            // Iniciar componentes en orden
+            typeWriter(0);
+            drawSunflowerHeart(); // Primero se dibuja el corazón completo
+            
+            // Retrasar el inicio de la caída hasta que el texto haya avanzado
+            setTimeout(startSunflowerFall, 3000); 
+            
+            // Iniciar contador
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        // 1. Escritura Automática del Texto
+        function typeWriter(i) {
+            const speed = 65; // velocidad
+            if (i < messageText.length) {
+                const char = messageText.charAt(i);
+                document.getElementById('text-msg').innerHTML += char === '\n' ? '<br>' : char;
+                setTimeout(() => typeWriter(i + 1), speed);
+            }
+        }
+
+        // 2. Dibujar el Corazón de Girasoles Estático y Completo
+        function drawSunflowerHeart() {
+            const container = document.getElementById('sunflower-heart');
+            container.innerHTML = ''; // Limpiar cualquier girasol previo
+            const numSunflowers = 120; // Cantidad para formar el corazón
+
+            for (let i = 0; i < numSunflowers; i++) {
+                const angle = (i / numSunflowers) * Math.PI * 2;
+                
+                // Ecuación matemática del corazón
+                const r = 80;
+                const x = r * 16 * Math.pow(Math.sin(angle), 3);
+                const y = -r * (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+
+                const flower = document.createElement('div');
+                flower.className = 'sunflower';
+                
+                // Posicionamiento en el centro del viewport del árbol
+                flower.style.left = `calc(50% + ${x}px)`;
+                flower.style.top = `calc(40% + ${y}px)`; // Un poco más arriba del centro
+                
+                // Variación de tamaño y rotación aleatoria para naturalidad
+                const scale = 0.8 + Math.random() * 0.4;
+                flower.style.transform = `scale(${scale}) rotate(${Math.random() * 360}deg)`;
+
+                // Animación de 'crecimiento' para que aparezcan progresivamente
+                setTimeout(() => {
+                    flower.style.opacity = '1';
+                }, i * 20); // Aparecen uno por uno rápidamente
+
+                container.appendChild(flower);
+            }
+        }
+
+        // 3. Iniciar la Animación de los Girasoles Cayendo (Ciclo)
+        function startSunflowerFall() {
+            const heartSunflowers = document.querySelectorAll('#sunflower-heart .sunflower');
+            
+            // Intervalo para seleccionar un girasol al azar y hacerlo caer
+            fallInterval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * heartSunflowers.length);
+                const flower = heartSunflowers[randomIndex];
+
+                // Solo si no está cayendo ya y es visible
+                if (!flower.classList.contains('falling') && flower.style.opacity === '1') {
+                    
+                    // Definir variables aleatorias de la animación CSS
+                    flower.style.setProperty('--random-x', `${(Math.random() - 0.5) * 100}px`);
+                    flower.style.setProperty('--random-rot', `${(Math.random() - 0.5) * 720}deg`);
+                    flower.style.setProperty('--fall-duration', `${4 + Math.random() * 3}s`);
+
+                    flower.classList.add('falling');
+
+                    // Cuando termina la animación, quitar la clase para que pueda volver a caer
+                    flower.addEventListener('animationend', () => {
+                        flower.classList.remove('falling');
+                        // Opcional: regenerar el girasol en el corazón
+                        // drawSunflowerHeart(); // Esto puede ser muy pesado, mejor solo quitar clase
+                    }, { once: true });
+                }
+            }, 200); // Velocidad a la que empiezan a caer (cada 200ms)
+        }
+
+        // 4. Lógica del Contador de Tiempo
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('countdown').innerHTML = 
+                `${days} días | ${hours} horas | ${minutes} min | ${seconds} seg`;
+        }
+    </script>
+</body>
+</html>
