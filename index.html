@@ -170,7 +170,6 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === PASTO CON MOVIMIENTO (BLOQUEADO) === */
         #grass-zone {
             position: relative;
             width: 300px;
@@ -258,7 +257,7 @@
             50% { transform: scaleX(-1) scaleY(1.08); }
         }
 
-        /* === HELLO KITTY ANIMADA (CUTE) === */
+        /* === HELLO KITTY PERFECTA (CORREGIDA Y BLINDADA) === */
         #kitty-zone {
             position: fixed;
             bottom: 60px; /* Alineado con el contador */
@@ -267,22 +266,22 @@
             height: 120px;
             z-index: 50; /* Detrás del pasto */
             pointer-events: none; /* No interfiere con clics */
-            display: none; /* Oculto hasta que inicia */
+            display: none; /* Oculto hasta que el texto termine */
             transition: left 6s linear, opacity 1s; /* Transición suave de caminata */
         }
 
         .kitty-body { position: relative; width: 100%; height: 100%; }
 
-        /* Ilustración SVG de Hello Kitty blindada */
+        /* Ilustración SVG Perfecta de Hello Kitty (Blindada) */
         .kitty-svg {
             position: absolute; bottom: 0; left: 0;
-            width: 80px; height: 80px; z-index: 1;
+            width: 85px; height: 85px; z-index: 1;
         }
 
         /* Sombrilla cute blindada */
         .parasol-svg {
-            position: absolute; top: -30px; left: -20px;
-            width: 100px; height: 100px; z-index: 0;
+            position: absolute; top: -35px; left: -25px;
+            width: 105px; height: 105px; z-index: 0;
             transform-origin: center bottom;
             animation: parasolWobble 4s infinite alternate; /* Balanceo tierno */
         }
@@ -292,7 +291,7 @@
             50% { transform: rotate(5deg); }
         }
 
-        /* Animación de caminata rítmica (Cute Walk) */
+        /* Animación de caminata cute (Cute Walk) */
         .kitty-walking {
             animation: kittyStepWobble 0.6s infinite alternate linear; /* Balanceo tierno */
         }
@@ -302,8 +301,8 @@
             100% { transform: rotate(3deg) translateY(-3px); }
         }
 
-        /* GUIÑO INTERMITENTE CUTE */
-        .kitty-svg .wink-eye {
+        /* GUIÑO CUTE PERFECCIONADO */
+        .kitty-svg .wink-eye-lid {
             opacity: 0;
             animation: kittyWink 3s infinite alternate;
         }
@@ -313,10 +312,10 @@
             100% { opacity: 1; }
         }
 
-        /* CORAZÓN FLOTANTE CUTE */
+        /* CORAZÓN FLOTANTE CUTE (BLOQUEADO) */
         #kitty-heart {
             position: absolute;
-            top: -20px; left: 30px;
+            top: -25px; left: 35px;
             font-size: 20px;
             color: #ff80ab; /* Rosa Pastel Cute */
             opacity: 0;
@@ -391,24 +390,30 @@
     <div id="kitty-zone">
         <div class="kitty-body">
             <svg class="parasol-svg" viewBox="0 0 100 100">
-                <path d="M50 85 C50 60, 50 30, 50 15 Z" stroke="#6b4226" stroke-width="2" fill="none"/>
-                <path d="M10 40 Q50 10, 90 40 L50 85 Z" fill="#ffffff" stroke="#ff80ab" stroke-width="1.5"/>
+                <path d="M50 90 L50 15 Z" stroke="#6b4226" stroke-width="2.5" fill="none"/>
+                <path d="M10 40 Q50 5, 90 40 L50 90 Z" fill="#ffffff" stroke="#ff80ab" stroke-width="1.8"/>
                 <path d="M10 40 C10 45, 15 45, 15 40 M25 40 C25 45, 30 45, 30 40 M40 40 C40 45, 45 45, 45 40 M55 40 C55 45, 60 45, 60 40 M70 40 C70 45, 75 45, 75 40 M85 40 C85 45, 90 45, 90 40 Z" fill="none" stroke="#ff80ab" stroke-width="1"/>
             </svg>
             
-            <svg class="kitty-svg" viewBox="0 0 100 100">
-                <path d="M25 80 Q50 95, 75 80 L65 55 Q50 65, 35 55 Z" fill="#fffef0" stroke="#ffc107" stroke-width="1.5"/>
-                <circle cx="50" cy="40" r="30" fill="#fff" stroke="#ffc107" stroke-width="1.5"/>
-                <path d="M25 25 Q15 20, 20 10 Z" fill="#fff" stroke="#ffc107" stroke-width="1.5"/>
-                <path d="M75 25 Q85 20, 80 10 Z" fill="#fff" stroke="#ffc107" stroke-width="1.5"/>
-                <circle cx="42" cy="45" r="3" fill="#000"/>
-                <circle cx="58" cy="45" r="3" fill="#000" id="right-eye"/>
-                <rect x="55" y="44" width="6" height="3" fill="#fff" class="wink-eye"/>
-                <ellipse cx="50" cy="50" rx="3.5" ry="2.5" fill="#ffeb3b" stroke="#ff9800" stroke-width="1"/>
-                <path d="M35 58 Q38 58, 41 58 M35 63 Q38 63, 41 63" stroke="#000" stroke-width="1" fill="none"/>
-                <path d="M65 58 Q62 58, 59 58 M65 63 Q62 63, 59 63" stroke="#000" stroke-width="1" fill="none"/>
-                <path d="M68 20 A8 8 0 0 1 80 20 A8 8 0 0 1 68 20 Z M74 20 L74 28" fill="#ff4081" stroke="#c2185b" stroke-width="1.5"/>
-                <path d="M35 80 L35 90 M65 80 L65 90 Z" stroke="#ffc107" stroke-width="1.5" fill="none" id="kitty-feet"/>
+            <svg class="kitty-svg" viewBox="0 0 100 120">
+                <ellipse cx="50" cy="45" rx="38" ry="32" fill="#ffffff" stroke="#000000" stroke-width="2.2"/>
+                
+                <path d="M18 28 Q10 18, 22 10 L30 18 Z" fill="#ffffff" stroke="#000000" stroke-width="2.2"/>
+                <path d="M82 28 Q90 18, 78 10 L70 18 Z" fill="#ffffff" stroke="#000000" stroke-width="2.2"/>
+                
+                <path d="M20 18 A10 10 0 0 1 40 18 A10 10 0 0 1 20 18 Z M28 18 L28 30" fill="#ff4081" stroke="#000000" stroke-width="2"/>
+                <circle cx="28" cy="18" r="5" fill="#ff4081" stroke="#000000" stroke-width="2"/>
+                
+                <ellipse cx="40" cy="50" rx="3.5" ry="5.5" fill="#000000"/> <ellipse cx="60" cy="50" rx="3.5" ry="5.5" fill="#000000" id="right-eye-kitty"/> <ellipse cx="60" cy="50" rx="4" ry="6" fill="#ffffff" class="wink-eye-lid"/>
+                <rect x="56" y="49" width="8" height="2" fill="#ffffff" class="wink-eye-lid"/>
+                
+                <ellipse cx="50" cy="58" rx="4.5" ry="3" fill="#ffeb3b" stroke="#000000" stroke-width="1.2"/> <path d="M28 48 Q15 45, 5 45 M28 53 Q15 53, 5 53 M28 58 Q15 61, 5 61" stroke="#000000" stroke-width="1.5" fill="none"/>
+                <path d="M72 48 Q85 45, 95 45 M72 53 Q85 53, 95 53 M72 58 Q85 61, 95 61" stroke="#000000" stroke-width="1.5" fill="none"/>
+                
+                <path d="M30 75 L25 105 A5 5 0 0 0 35 110 L65 110 A5 5 0 0 0 75 105 L70 75 Z" fill="#fce029" stroke="#000000" stroke-width="2"/>
+                
+                <path d="M20 80 Q15 85, 20 95" stroke="#000000" stroke-width="2" fill="none"/>
+                <path d="M80 80 Q85 85, 80 95" stroke="#000000" stroke-width="2" fill="none"/>
             </svg>
             
             <span id="kitty-heart">💗</span>
@@ -417,6 +422,8 @@
 
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
+        
+        // MENSAJE CORRECTO (BLOQUEADO)
         const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹<br><br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
@@ -434,13 +441,12 @@
                 setTimeout(() => {
                     startScreen.style.display = 'none';
                     document.getElementById('main-content').style.display = 'flex';
-                    typeWriterText();
+                    
+                    typeWriterText(); // Inicia la escritura del texto
+                    
                     drawHeart(); 
                     createGrass(); 
                     initializeBirdsCycle(); 
-                    
-                    // INICIAR HELLO KITTY (CUTE)
-                    setTimeout(initializeKittyCycle, 1000); // 1s después de que carga
                     
                     setTimeout(startFallingFlowers, 3500); 
                     actualizarContador();
@@ -457,7 +463,10 @@
                 }
                 document.getElementById('text-zone').innerHTML = messageHTML.substring(0, charIndex + 1);
                 charIndex++;
-                setTimeout(typeWriterText, 45); 
+                setTimeout(typeWriterText, 45); // Velocidad de escritura
+            } else {
+                // === NUEVO: INICIAR HELLO KITTY SÓLO CUANDO EL TEXTO TERMINA ===
+                setTimeout(initializeKittyCycle, 500); // Pequeño delay de 0.5s para suavidad
             }
         }
 
@@ -546,23 +555,21 @@
             function resetAndWait() {
                 const element = birdObj.element; const wing = birdObj.wingEl;
                 element.style.display = 'none'; element.style.transition = ''; wing.classList.remove('flapping');
-                // REGRESO RÁPIDO (5-10s)
                 const waitTime = 5000 + Math.random() * 5000;
                 setTimeout(arriveAndPerch, waitTime); 
             }
             setTimeout(arriveAndPerch, (2000 + Math.random() * 3000));
         }
 
-        // === NUEVO CICLO HELLO KITTY (CUTE Y BLINDADO) ===
+        // === CICLO HELLO KITTY PERFECTA (CORREGIDO Y BLINDADO) ===
         function initializeKittyCycle() {
             const kittyZone = document.getElementById('kitty-zone');
             const kittyHeart = document.getElementById('kitty-heart');
             
-            // Coordenada final centrada bajo el tronco
             const finalX = (window.innerWidth / 2) - 60; // Mitad - ancho/2
             
             function arrive() {
-                // Paso 1: Configurar llegada
+                // Paso 1: Configurar llegada (ahora se activa al terminar el texto)
                 kittyZone.style.display = 'block';
                 kittyZone.style.left = '-150px'; /* Start outside */
                 kittyZone.style.transition = 'left 6s linear, opacity 1s'; /* Transición caminata */
@@ -578,26 +585,19 @@
                 // Paso 3: Detenerse y cute actions
                 setTimeout(() => {
                     kittyZone.classList.remove('kitty-walking'); // Detiene caminata
-                    
-                    // Cute action 1: Heart float
-                    kittyHeart.classList.add('heart-float');
-                    
-                    // Cute action 2: Wink (handled by CSS animation)
-                }, 6100); // 6s de caminata + 0.1s de delay
+                    kittyHeart.classList.add('heart-float'); // Cute heart float
+                }, 6100); 
 
                 // Paso 4: Permanecer 20s posada y luego irse
-                setTimeout(leave, 26000); // 6s de caminata + 20s posada
+                setTimeout(leave, 26000); 
             }
 
             function leave() {
-                // Cute action clean up
                 kittyHeart.classList.remove('heart-float');
                 
-                // Paso 5: Activar cute walk y marchar
                 kittyZone.classList.add('kitty-walking');
                 kittyZone.style.left = (window.innerWidth + 50) + 'px'; /* Salir por derecha */
                 
-                // Paso 6: Ocultar y programar regreso periódicamente
                 setTimeout(() => {
                     kittyZone.style.display = 'none';
                     kittyZone.classList.remove('kitty-walking');
@@ -605,13 +605,14 @@
                     // Regresa periódicamente (30-50 segundos aleatorios)
                     const waitTime = 30000 + Math.random() * 20000;
                     setTimeout(arrive, waitTime);
-                }, 6000); // Tiempo de caminata salida
+                }, 6000); 
             }
 
-            // Iniciar ciclo por primera vez
+            // Iniciar primer ciclo
             arrive();
         }
 
+        // CAÍDA FLORES (BLOQUEADO)
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             setInterval(() => {
