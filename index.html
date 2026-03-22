@@ -174,14 +174,14 @@
         /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY === */
         #kitty-gif-container {
             position: absolute;
-            bottom: 10px; /* Ajustado para que esté SOBRE el pasto, no detrás */
-            left: calc(50% + 55px); /* A un lado del tronco (derecha) */
-            width: 90px; /* Tamaño ideal bajo el árbol, más pequeña para no tapar la rama */
+            bottom: -25px; /* Más abajo para que pise el pasto y quede en su misma línea */
+            left: 25px; /* Movida completamente a la izquierda del tronco */
+            width: 90px; 
             height: 90px;
-            z-index: 5; /* Por encima de todo, incluido el pasto (z-index: 4) */
-            pointer-events: none; /* No interfiere con clics */
-            opacity: 1; /* Visible desde el inicio */
-            transition: opacity 1.5s ease-in-out; /* Aparición mágica y suave */
+            z-index: 3; /* CRÍTICO: 3 la pone DETRÁS del pasto (que es 4) para que el pasto la cubra de enfrente */
+            pointer-events: none; 
+            opacity: 1; 
+            transition: opacity 1.5s ease-in-out; 
         }
 
         .kitty-gif {
@@ -196,7 +196,7 @@
             width: 300px;
             height: 30px; 
             margin: -40px auto 10px auto; 
-            z-index: 4; /* Cubre los pies del árbol, pero Hello Kitty (z-index: 5) está SOBRE él */
+            z-index: 4; /* Cubre los pies del árbol y ahora también los de Hello Kitty */
             overflow: hidden; 
             display: flex;
             align-items: flex-end; 
@@ -374,9 +374,6 @@
                 document.getElementById('text-zone').innerHTML = messageHTML.substring(0, charIndex + 1);
                 charIndex++;
                 setTimeout(typeWriterText, 45); 
-            } else {
-                // === MODIFICADO: ELIMINADA LA LÍNEA QUE HACÍA APARECER A HELLO KITTY ===
-                // document.getElementById('kitty-gif-container').style.opacity = '1';
             }
         }
 
