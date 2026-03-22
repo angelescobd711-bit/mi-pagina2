@@ -92,7 +92,7 @@
             margin-bottom: 10px;
         }
 
-        /* === Animación para el corazón que bombea === */
+        /* Animación para el corazón que bombea */
         .pumping-heart {
             display: inline-block;
             animation: pumpHeart 0.8s infinite alternate ease-in-out;
@@ -263,23 +263,31 @@
             50% { transform: scaleX(-1) scaleY(1.08); }
         }
 
-        /* === CONTADOR (BLOQUEADO) === */
+        /* === NUEVO: CSS DEL CONTADOR EN UN RECUADRO === */
         #counter-zone {
-            width: 100%;
-            margin-top: auto; 
-            padding-top: 20px;
+            width: calc(100% - 40px); /* Ajusta el ancho al padding del padre */
+            margin: auto auto 10px auto; /* Centrado y un poco de espacio abajo */
+            padding: 15px; /* Padding interno del recuadro */
+            border: 2px solid #5d4037; /* Borde marrón para el recuadro */
+            border-radius: 12px; /* Esquinas redondeadas */
+            background-color: #ffffff; /* Fondo blanco para el recuadro */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra suave para dar profundidad */
+            text-align: center; /* Asegura que el texto dentro del recuadro esté centrado */
         }
 
-        /* Definición de clase conservada por si acaso, aunque no se usa en este div modificado */
-        .divider-line {
-            width: 100%;
-            height: 1.5px;
-            background-color: #1a1a1a;
-            margin: 10px 0;
+        .counter-title { 
+            font-size: 1rem; 
+            margin-bottom: 8px; /* Un poco más de espacio abajo */
+            display: block; 
+            color: #5d4037; /* Color de título marrón */
         }
-
-        .counter-title { font-size: 1rem; margin-bottom: 5px; display: block; }
-        #timer { font-size: 1.1rem; font-weight: 500; letter-spacing: 0.5px; }
+        
+        #timer { 
+            font-size: 1.1rem; 
+            font-weight: 500; 
+            letter-spacing: 0.5px; 
+            color: #1a1a1a; /* Color de hora oscuro */
+        }
     </style>
 </head>
 <body>
@@ -311,8 +319,7 @@
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
         
-        // === TEXTO MODIFICADO CON ETIQUETAS HTML Y CORAZÓN BOMBEO + EMOJIS NUEVOS ===
-        // Se eliminó <br><br> entre oraciones para que sea un solo párrafo.
+        // TEXTO MODIFICADO (BLOQUEADO)
         const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹 Porque cuando hablo contigo todo se vuelve perfecto y mi amor crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
@@ -553,7 +560,7 @@
             }, 300); 
         }
 
-        // CONTADOR (BLOQUEADO)
+        // CONTADOR MODIFICADO (ELIMINADO EL CURSOR "_" AL FINAL)
         function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
@@ -562,8 +569,9 @@
             const m = Math.floor((diff / (1000 * 60)) % 60);
             const s = Math.floor((diff / 1000) % 60);
             
+            // Se quitó el " _" al final del InnerHTML
             document.getElementById('timer').innerHTML = 
-                `${d} días ${h} horas ${m} minutos ${s} segundos _`;
+                `${d} días ${h} horas ${m} minutos ${s} segundos`;
         }
     </script>
 </body>
