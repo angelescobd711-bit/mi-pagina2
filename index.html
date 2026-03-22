@@ -92,7 +92,7 @@
             margin-bottom: 10px;
         }
 
-        /* === NUEVO: Animación para el corazón que bombea === */
+        /* === Animación para el corazón que bombea === */
         .pumping-heart {
             display: inline-block;
             animation: pumpHeart 0.8s infinite alternate ease-in-out;
@@ -270,6 +270,7 @@
             padding-top: 20px;
         }
 
+        /* Definición de clase conservada por si acaso, aunque no se usa en este div modificado */
         .divider-line {
             width: 100%;
             height: 1.5px;
@@ -302,18 +303,17 @@
         <div id="grass-zone"></div>
 
         <div id="counter-zone">
-            <div class="divider-line"></div>
             <span class="counter-title">Mi amor por ti comenzó hace...</span>
             <div id="timer">Calculando...</div>
-            <div class="divider-line"></div>
         </div>
     </div>
 
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
         
-        // === NUEVO TEXTO CON ETIQUETAS HTML Y CORAZÓN BOMBEO ===
-        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices.<br><br>Porque cuando hablo contigo todo se vuelve perfecto y mi amor crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
+        // === TEXTO MODIFICADO CON ETIQUETAS HTML Y CORAZÓN BOMBEO + EMOJIS NUEVOS ===
+        // Se eliminó <br><br> entre oraciones para que sea un solo párrafo.
+        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹 Porque cuando hablo contigo todo se vuelve perfecto y mi amor crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
         let staticFlowers = []; 
@@ -346,10 +346,9 @@
             }, 400); 
         }
 
-        // === NUEVO: FUNCIÓN DE ESCRITURA INTELIGENTE QUE LEE HTML ===
+        // FUNCIÓN DE ESCRITURA INTELIGENTE QUE LEE HTML (BLOQUEADO)
         function typeWriterText() {
             if (charIndex < messageHTML.length) {
-                // Si encontramos una etiqueta HTML (como <div> o <br>), la leemos completa de un golpe
                 if (messageHTML.charAt(charIndex) === '<') {
                     while (messageHTML.charAt(charIndex) !== '>') {
                         charIndex++;
@@ -362,6 +361,7 @@
             }
         }
 
+        // DIBUJAR CORAZÓN (BLOQUEADO)
         function drawHeart() {
             const container = document.getElementById('heart-container');
             const centerX = 138; 
@@ -410,6 +410,7 @@
             });
         }
 
+        // CREAR PASTO (BLOQUEADO)
         function createGrass() {
             const container = document.getElementById('grass-zone');
             const numBlades = 60; 
@@ -430,6 +431,7 @@
             }
         }
 
+        // CICLO PAJARITOS (BLOQUEADO)
         function initializeBirdsCycle() {
             const treeZone = document.getElementById('tree-zone');
             
@@ -526,6 +528,7 @@
             setTimeout(arriveAndPerch, (5000 + Math.random() * 8000));
         }
 
+        // CAÍDA FLORES (BLOQUEADO)
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
@@ -550,6 +553,7 @@
             }, 300); 
         }
 
+        // CONTADOR (BLOQUEADO)
         function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
