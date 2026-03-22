@@ -171,17 +171,18 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY (CORREGIDO Y BLINDADO) === */
+        /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY === */
         #kitty-gif-container {
             position: absolute;
-            bottom: 10px; /* CORREGIDO: Subida para pisar el pasto, alineada con la base del tronco */
-            left: calc(50% - 100px); /* CORREGIDO: Movida a un lado pero mucho más cerca del tronco */
-            width: 90px; /* Tamaño ideal bajo el árbol, más pequeña para no tapar la rama */
+            /* CRÍTICO: La posición ahora es relativa a #main-content, no a #tree-zone */
+            bottom: 120px; /* Alineada verticalmente con el nacimiento del pasto */
+            left: 25%; /* Movida a la izquierda del tronco */
+            width: 90px; 
             height: 90px;
-            z-index: 5; /* CRÍTICO: 5 la pone DELANTE del pasto (que es 4) para que lo pise profesionalmente */
-            pointer-events: none; /* No interfiere con clics */
-            opacity: 1; /* Visible desde el inicio */
-            transition: opacity 1.5s ease-in-out; /* Aparición mágica y suave */
+            z-index: 3; /* Detrás del pasto (que es 4) */
+            pointer-events: none; 
+            opacity: 1; 
+            transition: left 6s linear, opacity 1.5s ease-in-out; 
         }
 
         .kitty-gif {
@@ -195,8 +196,9 @@
             position: relative;
             width: 300px;
             height: 30px; 
+            /* Se mantiene el margen para separar del contador */
             margin: -40px auto 10px auto; 
-            z-index: 4; /* Cubre los pies del árbol y de Hello Kitty */
+            z-index: 4; /* CRÍTICO: El pasto (4) está por delante de Hello Kitty (3) */
             overflow: hidden; 
             display: flex;
             align-items: flex-end; 
@@ -322,10 +324,8 @@
                 <path d="M 35 100 C 40 80, 45 60, 45 40 C 35 30, 20 25, 10 20 C 20 25, 35 35, 45 40 C 45 25, 40 10, 35 0 C 45 15, 50 30, 50 40 C 60 30, 75 25, 85 20 C 75 25, 60 35, 52 42 C 55 60, 60 80, 65 100 Z" fill="#6b4226"/>
             </svg>
             <div id="heart-container"></div>
-            
-            <div id="kitty-gif-container">
-                <img class="kitty-gif" src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZTdocWduaTV5OWFsZGtxZThwcHoweXpzZmk0dml2dng2Y2diN3JqcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kZqbBT64ECtjy/200.gif" alt="Hello Kitty">
-            </div>
+        </div> <div id="kitty-gif-container">
+            <img class="kitty-gif" src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZTdocWduaTV5OWFsZGtxZThwcHoweXpzZmk0dml2dng2Y2diN3JqcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kZqbBT64ECtjy/200.gif" alt="Hello Kitty">
         </div>
 
         <div id="grass-zone"></div>
@@ -465,44 +465,36 @@
             setTimeout(arriveAndPerch, (2000 + Math.random() * 3000));
         }
 
-        // === MODIFICADO: CICLO HELLO KITTY FIJADA AL SUELO Y PERFECTA (CORREGIDO Y BLINDADO) ===
+        // === MODIFICADO: CICLO HELLO KITTY ===
         function initializeKittyCycle() {
             const kittyZone = document.getElementById('kitty-gif-container');
             
-            // Coordenada final centrada bajo el tronco dentro del lienzo
-            // Mantenemos el offset para moverla a un lado pero más cerca del tronco
-            const finalX = (document.getElementById('tree-zone').offsetWidth / 2) - 100; // Movida a la izquierda pero más cerca
+            // Coordenada final a la izquierda del tronco
+            const finalX = '25%'; 
             
             function arrive() {
-                // Paso 1: Configurar llegada (ahora con absolute se ancla al scroll)
                 kittyZone.style.display = 'block';
-                kittyZone.style.left = '-150px'; /* Start outside */
-                kittyZone.style.transition = 'left 6s linear, opacity 1s'; /* Transición caminata */
+                kittyZone.style.left = '-150px'; 
                 
-                // Paso 2: Caminar al centro (actualizado a finalX corregido)
+                // Mueve a la izquierda
                 setTimeout(() => {
-                    kittyZone.style.left = finalX + 'px';
+                    kittyZone.style.left = finalX;
                 }, 100);
 
-                // Paso 4: Permanecer 20s posada y luego irse
-                setTimeout(leave, 26000); // 6s de caminata + 20s posada
+                setTimeout(leave, 26000); // Se queda 26s
             }
 
             function leave() {
-                kittyZone.style.transition = 'left 6s linear, opacity 1s'; 
-                kittyZone.style.left = (document.getElementById('main-content').offsetWidth + 50) + 'px'; /* Salir por derecha dentro del lienzo */
+                kittyZone.style.left = '120%'; /* Sale por la derecha */
                 
-                // Paso 6: Ocultar y programar regreso periódicamente
                 setTimeout(() => {
                     kittyZone.style.display = 'none';
-                    
-                    // Regresa periódicamente (30-50 segundos aleatorios)
                     const waitTime = 30000 + Math.random() * 20000;
                     setTimeout(arrive, waitTime);
-                }, 6000); // Tiempo de caminata salida
+                }, 6000); 
             }
 
-            // Iniciar primer ciclo
+            // Iniciar ciclo
             arrive();
         }
 
@@ -529,6 +521,12 @@
             const s = Math.floor((diff / 1000) % 60);
             document.getElementById('timer').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos`;
         }
+
+        // Inicia el ciclo de Hello Kitty cuando cargue la página
+        window.addEventListener('DOMContentLoaded', (event) => {
+            initializeKittyCycle();
+        });
+
     </script>
 </body>
 </html>
