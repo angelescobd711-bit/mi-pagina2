@@ -80,7 +80,7 @@
             padding: 5vh 20px 0 20px;
             opacity: 0;
             animation: fadeIn 1s forwards;
-            position: relative; /* Crítico para que Hello Kitty absolute funcione respecto a esto */
+            position: relative; /* Crítico para anclar a Kitty absolútamente */
         }
 
         @keyframes fadeIn { to { opacity: 1; } }
@@ -262,11 +262,11 @@
         /* === HELLO KITTY PERFECTA Y FIJADA AL SUELO (CORREGIDO Y BLINDADA) === */
         #kitty-zone {
             position: absolute; /* CAMBIADO DE fixed A absolute PARA QUE SE MUEVA CON EL SCROLL */
-            bottom: 60px; /* Alineado con el contador y el suelo del lienzo */
+            bottom: 120px; /* Súbela más arriba para q quede por el pasto */
             left: -150px; /* Fuera de la pantalla inicialmente (izquierda) */
             width: 120px;
             height: 120px;
-            z-index: 20; /* Detrás del pasto */
+            z-index: 3; /* Detrás del pasto (z-index: 4) */
             pointer-events: none; /* No interfiere con clics */
             display: none; /* Oculto hasta que el texto termine */
             transition: left 6s linear, opacity 1s; /* Transición suave de caminata */
@@ -398,7 +398,7 @@
                     <ellipse cx="40" cy="50" rx="3" ry="5.5" fill="#000000"/> <ellipse cx="60" cy="50" rx="3" ry="5.5" fill="#000000"/> <ellipse cx="50" cy="58" rx="4.5" ry="3" fill="#ffd700" stroke="#000000" stroke-width="1.2"/> <path d="M28 48 Q15 45, 5 45 M28 53 Q15 53, 5 53 M28 58 Q15 61, 5 61" stroke="#000000" stroke-width="1.5" fill="none"/>
                     <path d="M72 48 Q85 45, 95 45 M72 53 Q85 53, 95 53 M72 58 Q85 61, 95 61" stroke="#000000" stroke-width="1.5" fill="none"/>
                     
-                    <path d="M30 75 L25 105 A5 5 0 0 0 35 110 L65 110 A5 5 0 0 0 75 105 L70 75 Z" fill="#1a237e" stroke="#000000" stroke-width="2"/> <path d="M30 110 A10 5 0 0 0 45 110 Z" fill="#ffd700" stroke="#000000" stroke-width="2"/> <path d="M55 110 A10 5 0 0 0 70 110 Z" fill="#ffd700" stroke="#000000" stroke-width="2"/> <path d="M18 80 Q12 85, 18 95" stroke="#000000" stroke-width="2" fill="none"/> <path d="M82 80 Q88 85, 82 95" stroke="#000000" stroke-width="2" fill="none"/> </svg>
+                    <path d="M30 75 L25 105 A5 5 0 0 0 35 110 L65 110 A5 5 0 0 0 75 105 L70 75 Z" fill="#0047AB" stroke="#000000" stroke-width="2"/> <path d="M30 110 A10 5 0 0 0 45 110 Z" fill="#ffd700" stroke="#000000" stroke-width="2"/> <path d="M55 110 A10 5 0 0 0 70 110 Z" fill="#ffd700" stroke="#000000" stroke-width="2"/> <path d="M18 80 Q12 85, 18 95" stroke="#000000" stroke-width="2" fill="none"/> <path d="M82 80 Q88 85, 82 95" stroke="#000000" stroke-width="2" fill="none"/> </svg>
                 
                 <span id="kitty-heart">💗</span>
             </div>
@@ -541,8 +541,7 @@
             const kittyZone = document.getElementById('kitty-zone');
             const kittyHeart = document.getElementById('kitty-heart');
             
-            // Coordenada final centrada bajo el tronco dentro del lienzo
-            const finalX = (document.getElementById('tree-zone').offsetWidth / 2); // Centrada respecto al árbol
+            const finalX = (document.getElementById('tree-zone').offsetWidth / 2); 
             
             function arrive() {
                 // Paso 1: Configurar llegada
