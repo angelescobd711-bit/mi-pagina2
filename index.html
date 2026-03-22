@@ -77,7 +77,7 @@
             max-width: 500px;
             margin: 0 auto;
             flex: 1;
-            padding: 5vh 20px 0 20px; /* Reduje padding inferior para controlar espacios con el recuadro */
+            padding: 5vh 20px 0 20px;
             opacity: 0;
             animation: fadeIn 1s forwards;
         }
@@ -257,10 +257,11 @@
             50% { transform: scaleX(-1) scaleY(1.08); }
         }
 
-        /* === RECUADRO DEL CONTADOR CON ESPACIOS ABAJO === */
+        /* === RECUADRO DEL CONTADOR AJUSTADO === */
         #counter-zone {
-            width: calc(100% - 40px); 
-            margin: auto auto 40px auto; /* Aumenté el margen inferior para dejar los saltos libres */
+            width: 95%; /* Más ancho como pediste */
+            max-width: 480px;
+            margin: 30px auto 40px auto; /* Más espacio abajo del pasto (30px) */
             padding: 15px; 
             border: 2px solid #5d4037; 
             border-radius: 12px; 
@@ -305,7 +306,7 @@
         <div id="grass-zone"></div>
 
         <div id="counter-zone">
-            <span class="counter-title">Mi amor por ti comenzó hace...</span>
+            <span class="counter-title">Me Enamoré De Ti Hace..</span>
             <div id="timer">Calculando...</div>
         </div>
     </div>
@@ -313,7 +314,6 @@
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
         
-        // === MENSAJE CON SALTO DE LÍNEA EXTRA DESPUÉS DEL EMOJI ❤️‍🩹 ===
         const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹<br><br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
