@@ -171,17 +171,17 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY === */
+        /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY (CORREGIDO Y BLINDADO) === */
         #kitty-gif-container {
             position: absolute;
-            bottom: -25px; /* Más abajo para que pise el pasto y quede en su misma línea */
-            left: 25px; /* Movida completamente a la izquierda del tronco */
-            width: 90px; 
+            bottom: 10px; /* CORREGIDO: Subida para pisar el pasto, alineada con la base del tronco */
+            left: calc(50% - 100px); /* CORREGIDO: Movida a un lado pero mucho más cerca del tronco */
+            width: 90px; /* Tamaño ideal bajo el árbol, más pequeña para no tapar la rama */
             height: 90px;
-            z-index: 3; /* CRÍTICO: 3 la pone DETRÁS del pasto (que es 4) para que el pasto la cubra de enfrente */
-            pointer-events: none; 
-            opacity: 1; 
-            transition: opacity 1.5s ease-in-out; 
+            z-index: 5; /* CRÍTICO: 5 la pone DELANTE del pasto (que es 4) para que lo pise profesionalmente */
+            pointer-events: none; /* No interfiere con clics */
+            opacity: 1; /* Visible desde el inicio */
+            transition: opacity 1.5s ease-in-out; /* Aparición mágica y suave */
         }
 
         .kitty-gif {
@@ -196,7 +196,7 @@
             width: 300px;
             height: 30px; 
             margin: -40px auto 10px auto; 
-            z-index: 4; /* Cubre los pies del árbol y ahora también los de Hello Kitty */
+            z-index: 4; /* Cubre los pies del árbol y de Hello Kitty */
             overflow: hidden; 
             display: flex;
             align-items: flex-end; 
@@ -463,6 +463,47 @@
                 setTimeout(arriveAndPerch, waitTime); 
             }
             setTimeout(arriveAndPerch, (2000 + Math.random() * 3000));
+        }
+
+        // === MODIFICADO: CICLO HELLO KITTY FIJADA AL SUELO Y PERFECTA (CORREGIDO Y BLINDADO) ===
+        function initializeKittyCycle() {
+            const kittyZone = document.getElementById('kitty-gif-container');
+            
+            // Coordenada final centrada bajo el tronco dentro del lienzo
+            // Mantenemos el offset para moverla a un lado pero más cerca del tronco
+            const finalX = (document.getElementById('tree-zone').offsetWidth / 2) - 100; // Movida a la izquierda pero más cerca
+            
+            function arrive() {
+                // Paso 1: Configurar llegada (ahora con absolute se ancla al scroll)
+                kittyZone.style.display = 'block';
+                kittyZone.style.left = '-150px'; /* Start outside */
+                kittyZone.style.transition = 'left 6s linear, opacity 1s'; /* Transición caminata */
+                
+                // Paso 2: Caminar al centro (actualizado a finalX corregido)
+                setTimeout(() => {
+                    kittyZone.style.left = finalX + 'px';
+                }, 100);
+
+                // Paso 4: Permanecer 20s posada y luego irse
+                setTimeout(leave, 26000); // 6s de caminata + 20s posada
+            }
+
+            function leave() {
+                kittyZone.style.transition = 'left 6s linear, opacity 1s'; 
+                kittyZone.style.left = (document.getElementById('main-content').offsetWidth + 50) + 'px'; /* Salir por derecha dentro del lienzo */
+                
+                // Paso 6: Ocultar y programar regreso periódicamente
+                setTimeout(() => {
+                    kittyZone.style.display = 'none';
+                    
+                    // Regresa periódicamente (30-50 segundos aleatorios)
+                    const waitTime = 30000 + Math.random() * 20000;
+                    setTimeout(arrive, waitTime);
+                }, 6000); // Tiempo de caminata salida
+            }
+
+            // Iniciar primer ciclo
+            arrive();
         }
 
         function startFallingFlowers() {
