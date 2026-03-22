@@ -111,7 +111,6 @@
             margin: 0 auto;
         }
 
-        /* Tronco Centrado al 100% (BLOQUEADO) */
         .trunk-svg {
             position: absolute;
             bottom: 10px;
@@ -122,7 +121,6 @@
             z-index: 1;
         }
 
-        /* Contenedor del Corazón (BLOQUEADO) */
         #heart-container {
             position: absolute;
             top: 0; left: 0; 
@@ -130,7 +128,6 @@
             z-index: 2;
         }
 
-        /* Girasoles Individuales (BLOQUEADO) */
         .sunflower {
             position: absolute;
             width: 16px; 
@@ -163,7 +160,6 @@
             z-index: 2;
         }
 
-        /* Animación de caída (BLOQUEADO) */
         .falling-flower {
             z-index: 3;
             pointer-events: none;
@@ -175,7 +171,6 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === PASTO CON MOVIMIENTO (BLOQUEADO) === */
         #grass-zone {
             position: relative;
             width: 300px;
@@ -207,7 +202,6 @@
             50% { transform: rotate(15deg); } 
         }
 
-        /* === PAJARITOS ANIMADOS (BLOQUEADO) === */
         .bird {
             position: absolute;
             width: 20px; height: 10px;
@@ -263,30 +257,30 @@
             50% { transform: scaleX(-1) scaleY(1.08); }
         }
 
-        /* === NUEVO: CSS DEL CONTADOR EN UN RECUADRO === */
+        /* === RECUADRO DEL CONTADOR (BLOQUEADO) === */
         #counter-zone {
-            width: calc(100% - 40px); /* Ajusta el ancho al padding del padre */
-            margin: auto auto 10px auto; /* Centrado y un poco de espacio abajo */
-            padding: 15px; /* Padding interno del recuadro */
-            border: 2px solid #5d4037; /* Borde marrón para el recuadro */
-            border-radius: 12px; /* Esquinas redondeadas */
-            background-color: #ffffff; /* Fondo blanco para el recuadro */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra suave para dar profundidad */
-            text-align: center; /* Asegura que el texto dentro del recuadro esté centrado */
+            width: calc(100% - 40px); 
+            margin: auto auto 10px auto; 
+            padding: 15px; 
+            border: 2px solid #5d4037; 
+            border-radius: 12px; 
+            background-color: #ffffff; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            text-align: center; 
         }
 
         .counter-title { 
             font-size: 1rem; 
-            margin-bottom: 8px; /* Un poco más de espacio abajo */
+            margin-bottom: 8px; 
             display: block; 
-            color: #5d4037; /* Color de título marrón */
+            color: #5d4037; 
         }
         
         #timer { 
             font-size: 1.1rem; 
             font-weight: 500; 
             letter-spacing: 0.5px; 
-            color: #1a1a1a; /* Color de hora oscuro */
+            color: #1a1a1a; 
         }
     </style>
 </head>
@@ -319,8 +313,8 @@
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
         
-        // TEXTO MODIFICADO (BLOQUEADO)
-        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹 Porque cuando hablo contigo todo se vuelve perfecto y mi amor crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
+        // === MENSAJE ACTUALIZADO CON TUS AJUSTES EXACTOS ===
+        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹<br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
         let staticFlowers = []; 
@@ -329,238 +323,137 @@
         function iniciarExperiencia() {
             const startScreen = document.getElementById('start-screen');
             const icon = document.querySelector('.sunflower-icon');
-            
             startScreen.onclick = null;
             icon.style.animation = 'cutePop 0.6s ease forwards';
             
             setTimeout(() => {
                 startScreen.style.opacity = '0';
-                
                 setTimeout(() => {
                     startScreen.style.display = 'none';
                     document.getElementById('main-content').style.display = 'flex';
-                    
                     typeWriterText();
                     drawHeart(); 
                     createGrass(); 
                     initializeBirdsCycle(); 
-                    
                     setTimeout(startFallingFlowers, 3500); 
-                    
                     actualizarContador();
                     setInterval(actualizarContador, 1000);
                 }, 600); 
             }, 400); 
         }
 
-        // FUNCIÓN DE ESCRITURA INTELIGENTE QUE LEE HTML (BLOQUEADO)
         function typeWriterText() {
             if (charIndex < messageHTML.length) {
                 if (messageHTML.charAt(charIndex) === '<') {
-                    while (messageHTML.charAt(charIndex) !== '>') {
-                        charIndex++;
-                    }
+                    while (messageHTML.charAt(charIndex) !== '>') { charIndex++; }
                 }
-                
                 document.getElementById('text-zone').innerHTML = messageHTML.substring(0, charIndex + 1);
                 charIndex++;
-                setTimeout(typeWriterText, 45); // Velocidad de escritura
+                setTimeout(typeWriterText, 45); 
             }
         }
 
-        // DIBUJAR CORAZÓN (BLOQUEADO)
         function drawHeart() {
             const container = document.getElementById('heart-container');
-            const centerX = 138; 
-            const centerY = 135; 
-            const scaleX = 78; 
-            const scaleY = 82; 
-            
-            const step = 0.15;
-            const rowSpacing = step * 0.866; 
-
+            const centerX = 138; const centerY = 135; const scaleX = 78; const scaleY = 82; 
+            const step = 0.15; const rowSpacing = step * 0.866; 
             let row = 0;
-
             for (let y = -1.5; y <= 1.5; y += rowSpacing) {
                 let offsetX = (row % 2 === 0) ? 0 : step / 2;
-                
                 for (let x = -1.5; x <= 1.5; x += step) {
-                    let jx = x + offsetX - (step / 4);
-                    let jy = y;
-
+                    let jx = x + offsetX - (step / 4); let jy = y;
                     if (Math.pow(jx*jx + jy*jy - 1, 3) - jx*jx * Math.pow(jy, 3) <= 0) {
-                        
-                        let px = centerX + jx * scaleX;
-                        let py = centerY - jy * scaleY;
-
+                        let px = centerX + jx * scaleX; let py = centerY - jy * scaleY;
                         let flower = document.createElement('div');
                         flower.className = 'sunflower';
-                        flower.style.left = px + 'px';
-                        flower.style.top = py + 'px';
-                        
+                        flower.style.left = px + 'px'; flower.style.top = py + 'px';
                         let randomScale = 0.75 + Math.random() * 0.5;
                         let randomRotate = Math.random() * 360;
                         flower.style.transform = `translate(-50%, -50%) rotate(${randomRotate}deg) scale(${randomScale})`;
                         flower.style.opacity = '0'; 
-                        
                         container.appendChild(flower);
                         staticFlowers.push(flower);
                     }
                 }
                 row++;
             }
-
             staticFlowers.sort(() => Math.random() - 0.5).forEach((f, idx) => {
-                setTimeout(() => {
-                    f.style.opacity = '1';
-                }, idx * 5); 
+                setTimeout(() => { f.style.opacity = '1'; }, idx * 5); 
             });
         }
 
-        // CREAR PASTO (BLOQUEADO)
         function createGrass() {
             const container = document.getElementById('grass-zone');
-            const numBlades = 60; 
-
-            for (let i = 0; i < numBlades; i++) {
+            for (let i = 0; i < 60; i++) {
                 let blade = document.createElement('div');
                 blade.className = 'grass-blade';
-                
-                let randomHeight = 15 + Math.random() * 15; 
-                let randomDelay = Math.random() * 4; 
-                let randomDuration = 3 + Math.random() * 2; 
-
-                blade.style.height = randomHeight + 'px';
-                blade.style.animationDelay = randomDelay + 's';
-                blade.style.animationDuration = randomDuration + 's';
-
+                blade.style.height = (15 + Math.random() * 15) + 'px';
+                blade.style.animationDelay = Math.random() * 4 + 's';
+                blade.style.animationDuration = (3 + Math.random() * 2) + 's';
                 container.appendChild(blade);
             }
         }
 
-        // CICLO PAJARITOS (BLOQUEADO)
         function initializeBirdsCycle() {
             const treeZone = document.getElementById('tree-zone');
-            
             const perchPositions = [
                 { id: 1, startX: -150, endX: 450, branchX: 95, branchY: 212, arriveFace: 'right', leaveFace: 'right' },
                 { id: 2, startX: 450, endX: -150, branchX: 185, branchY: 212, arriveFace: 'left', leaveFace: 'left' }
             ];
-
             perchPositions.forEach(pos => {
                 let bird = document.createElement('div');
-                bird.className = `bird`;
-                bird.id = `bird-${pos.id}`;
-
+                bird.className = `bird`; bird.id = `bird-${pos.id}`;
                 let body = document.createElement('div'); body.className = 'bird-body';
                 let wing = document.createElement('div'); wing.className = 'bird-wing';
                 let eye = document.createElement('div'); eye.className = 'bird-eye';
-
                 body.appendChild(wing); body.appendChild(eye);
-                bird.appendChild(body);
-                treeZone.appendChild(bird);
-
+                bird.appendChild(body); treeZone.appendChild(bird);
                 staticBirds.push({ element: bird, wingEl: wing, data: pos });
             });
-
             staticBirds.forEach(birdObj => startBirdCycleController(birdObj));
         }
 
         function startBirdCycleController(birdObj) {
             function arriveAndPerch() {
-                const element = birdObj.element;
-                const wing = birdObj.wingEl;
-                const pos = birdObj.data;
-
-                element.style.display = 'block';
-                element.style.left = pos.startX + 'px';
-                element.style.top = '-50px'; 
-
-                if (pos.arriveFace === 'right') {
-                    element.classList.add('face-right');
-                } else {
-                    element.classList.remove('face-right');
-                }
-
-                wing.classList.add('flapping');
-                element.offsetHeight; 
-
+                const element = birdObj.element; const wing = birdObj.wingEl; const pos = birdObj.data;
+                element.style.display = 'block'; element.style.left = pos.startX + 'px'; element.style.top = '-50px'; 
+                if (pos.arriveFace === 'right') { element.classList.add('face-right'); } else { element.classList.remove('face-right'); }
+                wing.classList.add('flapping'); element.offsetHeight; 
                 element.style.transition = 'left 3s ease-out, top 3s ease-out';
-                element.style.left = pos.branchX + 'px';
-                element.style.top = pos.branchY + 'px';
-
-                setTimeout(() => {
-                    element.style.transition = ''; 
-                    element.classList.add('perched'); 
-                    wing.classList.remove('flapping'); 
-                }, 3050);
-
+                element.style.left = pos.branchX + 'px'; element.style.top = pos.branchY + 'px';
+                setTimeout(() => { element.style.transition = ''; element.classList.add('perched'); wing.classList.remove('flapping'); }, 3050);
                 setTimeout(leave, 15000); 
             }
-
             function leave() {
-                const element = birdObj.element;
-                const wing = birdObj.wingEl;
-                const pos = birdObj.data;
-
-                element.classList.remove('perched'); 
-                wing.classList.add('flapping'); 
-                
-                if (pos.leaveFace === 'right') {
-                    element.classList.add('face-right');
-                } else {
-                    element.classList.remove('face-right');
-                }
-
-                element.offsetHeight; 
-
-                element.style.transition = 'left 2.5s ease-in, top 2.5s ease-in';
-                element.style.left = pos.endX + 'px';
-                element.style.top = '-50px';
-
+                const element = birdObj.element; const wing = birdObj.wingEl; const pos = birdObj.data;
+                element.classList.remove('perched'); wing.classList.add('flapping'); 
+                if (pos.leaveFace === 'right') { element.classList.add('face-right'); } else { element.classList.remove('face-right'); }
+                element.offsetHeight; element.style.transition = 'left 2.5s ease-in, top 2.5s ease-in';
+                element.style.left = pos.endX + 'px'; element.style.top = '-50px';
                 setTimeout(resetAndWait, 2550); 
             }
-
             function resetAndWait() {
-                const element = birdObj.element;
-                const wing = birdObj.wingEl;
-                element.style.display = 'none'; 
-                element.style.transition = ''; 
-                wing.classList.remove('flapping');
-
-                const waitTime = 30000 + Math.random() * 20000;
-                setTimeout(arriveAndPerch, waitTime); 
+                const element = birdObj.element; const wing = birdObj.wingEl;
+                element.style.display = 'none'; element.style.transition = ''; wing.classList.remove('flapping');
+                setTimeout(arriveAndPerch, 30000 + Math.random() * 20000); 
             }
-
             setTimeout(arriveAndPerch, (5000 + Math.random() * 8000));
         }
 
-        // CAÍDA FLORES (BLOQUEADO)
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
-            
             setInterval(() => {
                 if (staticFlowers.length === 0) return;
-                
                 const sourceFlower = staticFlowers[Math.floor(Math.random() * staticFlowers.length)];
-                
                 let falling = document.createElement('div');
                 falling.className = 'sunflower falling-flower';
-                falling.style.left = sourceFlower.style.left;
-                falling.style.top = sourceFlower.style.top;
-                
-                let duration = 3 + Math.random() * 3; 
-                falling.style.animationDuration = duration + 's';
-                
+                falling.style.left = sourceFlower.style.left; falling.style.top = sourceFlower.style.top;
+                let duration = 3 + Math.random() * 3; falling.style.animationDuration = duration + 's';
                 container.appendChild(falling);
-                
-                setTimeout(() => {
-                    falling.remove();
-                }, duration * 1000);
+                setTimeout(() => { falling.remove(); }, duration * 1000);
             }, 300); 
         }
 
-        // CONTADOR MODIFICADO (ELIMINADO EL CURSOR "_" AL FINAL)
         function actualizarContador() {
             const now = new Date();
             const diff = now - startDate;
@@ -568,10 +461,7 @@
             const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
             const m = Math.floor((diff / (1000 * 60)) % 60);
             const s = Math.floor((diff / 1000) % 60);
-            
-            // Se quitó el " _" al final del InnerHTML
-            document.getElementById('timer').innerHTML = 
-                `${d} días ${h} horas ${m} minutos ${s} segundos`;
+            document.getElementById('timer').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos`;
         }
     </script>
 </body>
