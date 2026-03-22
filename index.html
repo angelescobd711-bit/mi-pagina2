@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL === */
+        /* === PANTALLA DE BOTÓN INICIAL (BLOQUEADO) === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +71,7 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Texto superior */
+        /* Texto superior (BLOQUEADO) */
         #text-zone {
             font-size: 1.15rem;
             line-height: 1.4;
@@ -95,7 +95,7 @@
             margin: 0 auto;
         }
 
-        /* Tronco Centrado */
+        /* Tronco Centrado al 100% (BLOQUEADO) */
         .trunk-svg {
             position: absolute;
             bottom: 10px;
@@ -106,7 +106,7 @@
             z-index: 1;
         }
 
-        /* Contenedor del Corazón */
+        /* Contenedor del Corazón (BLOQUEADO) */
         #heart-container {
             position: absolute;
             top: 0; left: 0; 
@@ -114,7 +114,7 @@
             z-index: 2;
         }
 
-        /* Girasoles Individuales */
+        /* Girasoles Individuales (BLOQUEADO) */
         .sunflower {
             position: absolute;
             width: 16px; 
@@ -147,7 +147,7 @@
             z-index: 2;
         }
 
-        /* Animación de caída */
+        /* Animación de caída (BLOQUEADO) */
         .falling-flower {
             z-index: 3;
             pointer-events: none;
@@ -159,14 +159,13 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === ZONA DE PASTO CON MOVIMIENTO === */
+        /* === PASTO CON MOVIMIENTO (BLOQUEADO) === */
         #grass-zone {
             position: relative;
             width: 300px;
             height: 30px; 
-            /* Margen negativo para subir el pasto justo a la base del tronco */
             margin: -40px auto 10px auto; 
-            z-index: 4; /* Lo coloca por delante del tronco */
+            z-index: 4; 
             overflow: hidden; 
             display: flex;
             align-items: flex-end; 
@@ -192,7 +191,62 @@
             50% { transform: rotate(15deg); } 
         }
 
-        /* === CONTADOR === */
+        /* === NUEVO: PAJARITOS ANIMADOS === */
+        .bird {
+            position: absolute;
+            width: 22px; height: 18px;
+            background-color: #795548; /* Marrón orgánico */
+            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+            z-index: 3; /* Arriba del corazón */
+            opacity: 0; display: none; /* Estado inicial: oculto */
+            transition: opacity 1s, left 3s ease-out, top 3s ease-out; /* Transiciones suaves de vuelo */
+        }
+
+        /* Alas, Pico y Ojos de los pajaritos */
+        .bird-body { position: relative; width: 100%; height: 100%; }
+        
+        .bird-wing {
+            position: absolute; top: 1px; left: -1px;
+            width: 14px; height: 10px;
+            background-color: #a1887f; /* Color de ala */
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            transform: rotate(-10deg);
+        }
+
+        .bird-beak {
+            position: absolute; top: 6px; left: -4px;
+            width: 0; height: 0;
+            border-top: 2px solid transparent;
+            border-bottom: 2px solid transparent;
+            border-right: 5px solid #ff9800; /* Pico naranja */
+        }
+
+        .bird-eye {
+            position: absolute; top: 4px; left: 3px;
+            width: 3px; height: 3px;
+            background-color: #fff;
+            border-radius: 50%;
+        }
+
+        .bird-eye::after {
+            content: ''; position: absolute; top: 1px; left: 1px;
+            width: 1px; height: 1px; background-color: #000; border-radius: 50%;
+        }
+
+        /* Voltear pajaritos que miran a la izquierda */
+        .bird.facing-left { transform: scaleX(-1); }
+
+        /* Estado posado con animación de "bamboleo" suave */
+        .bird.perched {
+            animation: birdPerchBreathe 5s ease-in-out infinite;
+        }
+
+        @keyframes birdPerchBreathe {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.05); }
+        }
+
+        /* === CONTADOR (BLOQUEADO) === */
         #counter-zone {
             width: 100%;
             margin-top: auto; 
@@ -243,6 +297,7 @@
 
         let charIndex = 0;
         let staticFlowers = []; 
+        let staticBirds = []; // Guardará los objetos de pajaritos para el ciclo
 
         function iniciarExperiencia() {
             document.getElementById('start-screen').style.opacity = '0';
@@ -253,6 +308,9 @@
                 typeWriterText();
                 drawHeart(); 
                 createGrass(); 
+                
+                // Iniciar componente de pajaritos animados
+                initializeBirdsCycle(); 
                 
                 setTimeout(startFallingFlowers, 3500); 
                 
@@ -277,6 +335,7 @@
 
         function drawHeart() {
             const container = document.getElementById('heart-container');
+            // Verificación matemática de alineación perfecta sobre tronco BLOQUEADA
             const centerX = 138; 
             const centerY = 135; 
             const scaleX = 78; 
@@ -343,6 +402,104 @@
             }
         }
 
+        // === NUEVO: INICIALIZACIÓN Y LÓGICA DE CICLO DE PAJARITOS ===
+        function initializeBirdsCycle() {
+            const treeZone = document.getElementById('tree-zone');
+            
+            // Definimos las coordenadas exactas de posado en las ramas señaladas
+            const perchPositions = [
+                { id: 1, left: 110, top: 170, facing: 'right' }, // Rama izquierda en el corazón
+                { id: 2, left: 210, top: 190, facing: 'left' }   // Rama derecha en el corazón
+            ];
+
+            // 1. Crear elementos DOM para los pajaritos
+            perchPositions.forEach(pos => {
+                let bird = document.createElement('div');
+                bird.className = `bird ${pos.facing === 'left' ? 'facing-left' : ''}`;
+                bird.id = `bird-${pos.id}`;
+
+                let body = document.createElement('div'); body.className = 'bird-body';
+                let wing = document.createElement('div'); wing.className = 'bird-wing';
+                let beak = document.createElement('div'); beak.className = 'bird-beak';
+                let eye = document.createElement('div'); eye.className = 'bird-eye';
+
+                body.appendChild(wing); body.appendChild(beak); body.appendChild(eye);
+                bird.appendChild(body);
+                treeZone.appendChild(bird);
+
+                staticBirds.push({ element: bird, data: pos });
+            });
+
+            // 2. Programar el ciclo de cada pajarito (llegar, posarse, irse, volver)
+            staticBirds.forEach(birdObj => startBirdCycleController(birdObj));
+        }
+
+        function startBirdCycleController(birdObj) {
+            // Función interna para gestionar las etapas del ciclo
+            function arriveAndPerch() {
+                const element = birdObj.element;
+                const pos = birdObj.data;
+
+                // Paso 1: Configurar estado inicial oculto fuera de pantalla (arriba)
+                element.style.display = 'block';
+                element.style.opacity = '0';
+                // Salen de un lado aleatorio arriba
+                const startOff = pos.facing === 'left' ? 350 : -50;
+                element.style.left = startOff + 'px';
+                element.style.top = '-50px';
+
+                // Paso 2: Volar hacia la rama (Transición de CSS activada)
+                setTimeout(() => { // Pequeño retraso para que se registre el estado inicial
+                    element.style.transition = 'opacity 1s, left 3s ease-out, top 3s ease-out';
+                    element.style.left = pos.left + 'px';
+                    element.style.top = pos.top + 'px';
+                    element.style.opacity = '1';
+                }, 100);
+
+                // Paso 3: Posarse (después del tiempo de vuelo)
+                setTimeout(() => {
+                    element.style.transition = ''; // Reset transition para evitar desfases
+                    element.classList.add('perched'); // Activa la animación suave de bamboleo
+                }, 3100);
+
+                // Paso 4: Quedarse 15 segundos y luego irse
+                setTimeout(leave, 15000); // Se quedan 15s posados
+            }
+
+            function leave() {
+                const element = birdObj.element;
+                const pos = birdObj.data;
+
+                element.classList.remove('perched'); // Desactiva bamboleo
+                
+                // Configurar transición de vuelo de salida (más rápida)
+                element.style.transition = 'opacity 1s, left 2s ease-in, top 2s ease-in';
+                
+                // Salen volando hacia arriba y el lado contrario
+                const endOff = pos.facing === 'left' ? -100 : 400;
+                element.style.left = endOff + 'px';
+                element.style.top = '-80px';
+                element.style.opacity = '0';
+
+                // Paso 5: Ocultar completamente y programar el regreso periódicamente
+                setTimeout(resetAndWait, 2100); // Tiempo de vuelo de salida
+            }
+
+            function resetAndWait() {
+                const element = birdObj.element;
+                element.style.display = 'none'; // Desaparece del lienzo principal
+                element.style.transition = ''; // Limpia transiciones
+
+                // Paso 6: Tiempo de espera para volver (Periódico, 40-60 segundos aleatorios)
+                const waitTime = 40000 + Math.random() * 20000;
+                setTimeout(arriveAndPerch, waitTime); 
+            }
+
+            // Iniciar primer ciclo con un retraso inicial aleatorio para no salir juntos
+            setTimeout(arriveAndPerch, (5000 + Math.random() * 10000));
+        }
+
+        // === CAÍDA GIRASOLES (BLOQUEADO) ===
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
