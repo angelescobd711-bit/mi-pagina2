@@ -84,7 +84,6 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Texto superior */
         #text-zone {
             font-size: 1.15rem;
             line-height: 1.4;
@@ -201,6 +200,7 @@
             50% { transform: rotate(15deg); } 
         }
 
+        /* === PAJARITOS AZULES (BLOQUEADO) === */
         .bird {
             position: absolute;
             width: 20px; height: 10px;
@@ -256,12 +256,12 @@
             50% { transform: scaleX(-1) scaleY(1.08); }
         }
 
-        /* === RECUADRO DEL CONTADOR (MÁS ANCHO) === */
+        /* === RECUADRO DEL CONTADOR (BLOQUEADO) === */
         #counter-zone {
-            width: 98%; /* Aumentado para mayor ancho visual */
+            width: 98%; 
             max-width: 480px;
             margin: 30px auto 40px auto; 
-            padding: 15px 5px; /* Reduje padding lateral para aprovechar el ancho */
+            padding: 15px 5px;
             border: 2px solid #5d4037; 
             border-radius: 12px; 
             background-color: #ffffff; 
@@ -277,7 +277,7 @@
         }
         
         #timer { 
-            font-size: 1.05rem; /* Ajuste ligero para que quepa bien en el ancho */
+            font-size: 1.05rem; 
             font-weight: 500; 
             letter-spacing: 0.2px; 
             color: #1a1a1a; 
@@ -412,6 +412,7 @@
             staticBirds.forEach(birdObj => startBirdCycleController(birdObj));
         }
 
+        // === AJUSTE DE TIEMPO DE REGRESO DE PAJARITOS ===
         function startBirdCycleController(birdObj) {
             function arriveAndPerch() {
                 const element = birdObj.element; const wing = birdObj.wingEl; const pos = birdObj.data;
@@ -434,9 +435,11 @@
             function resetAndWait() {
                 const element = birdObj.element; const wing = birdObj.wingEl;
                 element.style.display = 'none'; element.style.transition = ''; wing.classList.remove('flapping');
-                setTimeout(arriveAndPerch, 30000 + Math.random() * 20000); 
+                // AHORA REGRESAN MÁS RÁPIDO: Esperan entre 5 y 10 segundos para volver
+                const waitTime = 5000 + Math.random() * 5000;
+                setTimeout(arriveAndPerch, waitTime); 
             }
-            setTimeout(arriveAndPerch, (5000 + Math.random() * 8000));
+            setTimeout(arriveAndPerch, (2000 + Math.random() * 3000));
         }
 
         function startFallingFlowers() {
