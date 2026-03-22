@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL (BLOQUEADO) === */
+        /* === PANTALLA DE BOTÓN INICIAL (MODIFICADA SOLO CON TEXTO Y ANIMACIÓN) === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -33,7 +33,7 @@
             justify-content: center;
             z-index: 100;
             background-color: #f5ebe1;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
             cursor: pointer;
         }
 
@@ -48,12 +48,27 @@
             100% { transform: scale(1); }
         }
 
+        /* Nueva animación linda al hacer clic */
+        @keyframes cutePop {
+            0% { transform: scale(1) rotate(0deg); }
+            40% { transform: scale(1.3) rotate(15deg); }
+            100% { transform: scale(0) rotate(-20deg); opacity: 0; }
+        }
+
         .click-text {
             margin-top: 15px;
             font-size: 1.3rem;
             color: #5d4037;
             border-bottom: 2px solid #fbc02d;
             padding-bottom: 5px;
+        }
+
+        /* Nuevo estilo para el texto de Fersita */
+        .subtitle-text {
+            margin-top: 8px;
+            font-size: 1.1rem;
+            color: #795548;
+            font-weight: 500;
         }
 
         /* === CONTENIDO PRINCIPAL === */
@@ -87,7 +102,7 @@
 
         @keyframes blinker { 50% { opacity: 0; } }
 
-        /* === ZONA DEL ÁRBOL === */
+        /* === ZONA DEL ÁRBOL (BLOQUEADO) === */
         #tree-zone {
             position: relative;
             width: 300px;
@@ -191,14 +206,14 @@
             50% { transform: rotate(15deg); } 
         }
 
-        /* === PAJARITOS ANIMADOS Y CORREGIDOS === */
+        /* === PAJARITOS ANIMADOS (BLOQUEADO) === */
         .bird {
             position: absolute;
-            width: 20px; height: 10px; /* Estilizados */
-            background-color: #2196F3; /* Azul */
+            width: 20px; height: 10px;
+            background-color: #2196F3; 
             border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
             z-index: 10; 
-            display: none; /* Oculto inicialmente */
+            display: none; 
         }
 
         .bird-body { position: relative; width: 100%; height: 100%; }
@@ -208,7 +223,6 @@
             width: 10px; height: 10px; background-color: #2196F3; border-radius: 50%;
         }
 
-        /* El pico a la izquierda por defecto */
         .bird::after {
             content: ''; position: absolute; top: -1px; left: -6px;
             width: 0; height: 0;
@@ -228,24 +242,20 @@
             transform-origin: bottom right; transform: rotate(-10deg);
         }
 
-        /* Aleteo realista */
         .bird-wing.flapping { animation: flap 0.15s infinite alternate linear; }
         @keyframes flap {
             0% { transform: rotate(0deg) scaleY(1); }
             100% { transform: rotate(-50deg) scaleY(0.4); }
         }
 
-        /* Orientación: Voltea el pájaro hacia la derecha */
         .bird.face-right { transform: scaleX(-1); }
 
-        /* Movimiento de respiración cuando están posados */
         .bird.perched { animation: birdPerchBreathe 3s ease-in-out infinite; }
         @keyframes birdPerchBreathe {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(1.08); }
         }
         
-        /* Combinación de posado y volteado */
         .bird.perched.face-right { animation: birdPerchBreatheRight 3s ease-in-out infinite; }
         @keyframes birdPerchBreatheRight {
             0%, 100% { transform: scaleX(-1) scaleY(1); }
@@ -274,7 +284,8 @@
 
     <div id="start-screen" onclick="iniciarExperiencia()">
         <div class="sunflower-icon">🌻</div>
-        <div class="click-text">Flores Para Ti</div>
+        <div class="click-text">Para Ti Hermosa ♡</div>
+        <div class="subtitle-text">-Fersita 💕</div>
     </div>
 
     <div id="main-content">
@@ -306,25 +317,38 @@
         let staticBirds = []; 
 
         function iniciarExperiencia() {
-            document.getElementById('start-screen').style.opacity = '0';
+            const startScreen = document.getElementById('start-screen');
+            const icon = document.querySelector('.sunflower-icon');
+            
+            // Evita que se pueda hacer clic varias veces
+            startScreen.onclick = null;
+            
+            // Inicia la animación linda de la flor
+            icon.style.animation = 'cutePop 0.6s ease forwards';
+            
+            // Espera a que termine la animación de la flor para desvanecer el fondo
             setTimeout(() => {
-                document.getElementById('start-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
+                startScreen.style.opacity = '0';
                 
-                typeWriterText();
-                drawHeart(); 
-                createGrass(); 
-                
-                // Iniciar componente de pajaritos animados
-                initializeBirdsCycle(); 
-                
-                setTimeout(startFallingFlowers, 3500); 
-                
-                actualizarContador();
-                setInterval(actualizarContador, 1000);
-            }, 500);
+                // Muestra el contenido principal
+                setTimeout(() => {
+                    startScreen.style.display = 'none';
+                    document.getElementById('main-content').style.display = 'flex';
+                    
+                    typeWriterText();
+                    drawHeart(); 
+                    createGrass(); 
+                    initializeBirdsCycle(); 
+                    
+                    setTimeout(startFallingFlowers, 3500); 
+                    
+                    actualizarContador();
+                    setInterval(actualizarContador, 1000);
+                }, 600); // Tiempo del desvanecimiento
+            }, 400); // Tiempo de la animación de saltito
         }
 
+        // TODO DE AQUÍ EN ADELANTE ESTÁ ABSOLUTAMENTE BLOQUEADO E INTACTO
         function typeWriterText() {
             if (charIndex < message.length) {
                 const char = message.charAt(charIndex);
@@ -407,19 +431,14 @@
             }
         }
 
-        // === CICLO DE PAJARITOS (CORRECCIONES DE VUELO Y POSICIÓN) ===
         function initializeBirdsCycle() {
             const treeZone = document.getElementById('tree-zone');
             
-            // Orientación: arriveFace/leaveFace determinan a dónde apunta el pico volando.
             const perchPositions = [
-                // Rama izquierda: Entra por izq (-150) -> vuela derecha -> aterriza en 95,212 -> sale por der (450)
                 { id: 1, startX: -150, endX: 450, branchX: 95, branchY: 212, arriveFace: 'right', leaveFace: 'right' },
-                // Rama derecha: Entra por der (450) -> vuela izq -> aterriza en 185,212 -> sale por izq (-150)
                 { id: 2, startX: 450, endX: -150, branchX: 185, branchY: 212, arriveFace: 'left', leaveFace: 'left' }
             ];
 
-            // Crear DOM
             perchPositions.forEach(pos => {
                 let bird = document.createElement('div');
                 bird.className = `bird`;
@@ -436,7 +455,6 @@
                 staticBirds.push({ element: bird, wingEl: wing, data: pos });
             });
 
-            // Iniciar ciclo
             staticBirds.forEach(birdObj => startBirdCycleController(birdObj));
         }
 
@@ -446,12 +464,10 @@
                 const wing = birdObj.wingEl;
                 const pos = birdObj.data;
 
-                // Paso 1: Configurar posición de llegada
                 element.style.display = 'block';
                 element.style.left = pos.startX + 'px';
                 element.style.top = '-50px'; 
 
-                // Configurar orientación del pico (De frente)
                 if (pos.arriveFace === 'right') {
                     element.classList.add('face-right');
                 } else {
@@ -459,23 +475,18 @@
                 }
 
                 wing.classList.add('flapping');
-
-                // Forzar lectura del navegador para que inicie de inmediato
                 element.offsetHeight; 
 
-                // Paso 2: Volar hacia la rama
                 element.style.transition = 'left 3s ease-out, top 3s ease-out';
                 element.style.left = pos.branchX + 'px';
                 element.style.top = pos.branchY + 'px';
 
-                // Paso 3: Aterrizar exacto en la rama (y dejar de aletear)
                 setTimeout(() => {
                     element.style.transition = ''; 
                     element.classList.add('perched'); 
                     wing.classList.remove('flapping'); 
                 }, 3050);
 
-                // Paso 4: Esperar en la rama
                 setTimeout(leave, 15000); 
             }
 
@@ -487,7 +498,6 @@
                 element.classList.remove('perched'); 
                 wing.classList.add('flapping'); 
                 
-                // Configurar orientación para salir (De frente)
                 if (pos.leaveFace === 'right') {
                     element.classList.add('face-right');
                 } else {
@@ -496,12 +506,10 @@
 
                 element.offsetHeight; 
 
-                // Configurar el vuelo de salida hacia el otro borde
                 element.style.transition = 'left 2.5s ease-in, top 2.5s ease-in';
                 element.style.left = pos.endX + 'px';
                 element.style.top = '-50px';
 
-                // Paso 5: Ocultar al salir de pantalla
                 setTimeout(resetAndWait, 2550); 
             }
 
@@ -512,7 +520,6 @@
                 element.style.transition = ''; 
                 wing.classList.remove('flapping');
 
-                // Esperar para repetir ciclo
                 const waitTime = 30000 + Math.random() * 20000;
                 setTimeout(arriveAndPerch, waitTime); 
             }
@@ -520,7 +527,6 @@
             setTimeout(arriveAndPerch, (5000 + Math.random() * 8000));
         }
 
-        // === CAÍDA GIRASOLES (BLOQUEADO) ===
         function startFallingFlowers() {
             const container = document.getElementById('heart-container');
             
