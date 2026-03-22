@@ -171,16 +171,17 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
-        /* === CONTENEDOR DEL GIF DE HELLO KITTY === */
+        /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY === */
         #kitty-gif-container {
             position: absolute;
-            bottom: 175px; 
+            bottom: 160px; 
             left: 25%; 
             width: 90px; 
             height: 90px;
-            z-index: 3; /* Detrás del pasto (que es 4) */
+            z-index: 3; 
             pointer-events: none; 
             opacity: 1; 
+            /* La transición se manejará desde JS para el ciclo */
             transition: left 6s linear, opacity 1.5s ease-in-out; 
         }
 
@@ -282,8 +283,7 @@
         #counter-zone {
             width: 98%; 
             max-width: 480px;
-            /* Se redujo el margen inferior para dar espacio al reproductor */
-            margin: 30px auto 20px auto; 
+            margin: 30px auto 40px auto; 
             padding: 15px 5px;
             border: 2px solid #5d4037; 
             border-radius: 12px; 
@@ -335,8 +335,7 @@
             <span class="counter-title">Me Enamoré De Ti Desde Hace..</span>
             <div id="timer">Calculando...</div>
         </div>
-
-        <div style="display: flex; justify-content: center; width: 98%; max-width: 480px; margin: 0 auto 40px auto;">
+                <div style="display: flex; justify-content: center; width: 98%; max-width: 480px; margin: 0 auto 40px auto;">
             <iframe style="border-radius:12px" src="https://open.spotify.com/track/0rCxrlZhWzLy5ULIEDL3zs?si=LMKo3IdPSZSFHtN_P7lv9Q" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
 
@@ -344,7 +343,7 @@
 
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
-        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹<br><br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
+        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices ❤️‍🩹<br><br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
         let staticFlowers = []; 
@@ -471,33 +470,38 @@
             setTimeout(arriveAndPerch, (2000 + Math.random() * 3000));
         }
 
-        // === CICLO HELLO KITTY ===
+        // === MODIFICADO: CICLO HELLO KITTY ARREGLADO ===
         function initializeKittyCycle() {
             const kittyZone = document.getElementById('kitty-gif-container');
-            
             const finalX = '25%'; 
             
             function arrive() {
+                // Quitamos la transición momentáneamente para teletransportarla al inicio
+                kittyZone.style.transition = 'none';
                 kittyZone.style.display = 'block';
                 kittyZone.style.left = '-150px'; 
                 
+                // Esperamos un instante pequeñito y restauramos la animación
                 setTimeout(() => {
+                    kittyZone.style.transition = 'left 6s linear, opacity 1.5s ease-in-out';
                     kittyZone.style.left = finalX;
-                }, 100);
+                }, 50);
 
-                setTimeout(leave, 26000); 
+                setTimeout(leave, 26000); // Se queda 26s
             }
 
             function leave() {
-                kittyZone.style.left = '120%'; 
+                kittyZone.style.left = '120%'; /* Sale por la derecha */
                 
                 setTimeout(() => {
                     kittyZone.style.display = 'none';
-                    const waitTime = 30000 + Math.random() * 20000;
+                    // Modificado: Ahora regresa rápido, entre 5 y 10 segundos
+                    const waitTime = 5000 + Math.random() * 5000;
                     setTimeout(arrive, waitTime);
                 }, 6000); 
             }
 
+            // Iniciar ciclo
             arrive();
         }
 
@@ -525,6 +529,7 @@
             document.getElementById('timer').innerHTML = `${d} días ${h} horas ${m} minutos ${s} segundos`;
         }
 
+        // Inicia el ciclo de Hello Kitty cuando cargue la página
         window.addEventListener('DOMContentLoaded', (event) => {
             initializeKittyCycle();
         });
