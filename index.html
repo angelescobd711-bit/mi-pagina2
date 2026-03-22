@@ -174,14 +174,14 @@
         /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY === */
         #kitty-gif-container {
             position: absolute;
-            /* CRÍTICO: La posición ahora es relativa a #main-content, no a #tree-zone */
-            bottom: 160px; /* ¡AQUÍ ESTÁ EL ÚNICO CAMBIO! Se subió para que pise el pasto */
-            left: 25%; /* Movida a la izquierda del tronco */
+            bottom: 175px; 
+            left: 25%; 
             width: 90px; 
             height: 90px;
-            z-index: 3; /* Detrás del pasto (que es 4) */
+            z-index: 3; 
             pointer-events: none; 
             opacity: 1; 
+            /* La transición se manejará desde JS para el ciclo */
             transition: left 6s linear, opacity 1.5s ease-in-out; 
         }
 
@@ -196,9 +196,8 @@
             position: relative;
             width: 300px;
             height: 30px; 
-            /* Se mantiene el margen para separar del contador */
             margin: -40px auto 10px auto; 
-            z-index: 4; /* CRÍTICO: El pasto (4) está por delante de Hello Kitty (3) */
+            z-index: 4; 
             overflow: hidden; 
             display: flex;
             align-items: flex-end; 
@@ -324,7 +323,9 @@
                 <path d="M 35 100 C 40 80, 45 60, 45 40 C 35 30, 20 25, 10 20 C 20 25, 35 35, 45 40 C 45 25, 40 10, 35 0 C 45 15, 50 30, 50 40 C 60 30, 75 25, 85 20 C 75 25, 60 35, 52 42 C 55 60, 60 80, 65 100 Z" fill="#6b4226"/>
             </svg>
             <div id="heart-container"></div>
-        </div> <div id="kitty-gif-container">
+        </div>
+
+        <div id="kitty-gif-container">
             <img class="kitty-gif" src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZTdocWduaTV5OWFsZGtxZThwcHoweXpzZmk0dml2dng2Y2diN3JqcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kZqbBT64ECtjy/200.gif" alt="Hello Kitty">
         </div>
 
@@ -338,7 +339,7 @@
 
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
-        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices ❤️‍🩹<br><br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
+        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹<br><br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
         let staticFlowers = []; 
@@ -465,21 +466,22 @@
             setTimeout(arriveAndPerch, (2000 + Math.random() * 3000));
         }
 
-        // === MODIFICADO: CICLO HELLO KITTY ===
+        // === MODIFICADO: CICLO HELLO KITTY ARREGLADO ===
         function initializeKittyCycle() {
             const kittyZone = document.getElementById('kitty-gif-container');
-            
-            // Coordenada final a la izquierda del tronco
             const finalX = '25%'; 
             
             function arrive() {
+                // Quitamos la transición momentáneamente para teletransportarla al inicio
+                kittyZone.style.transition = 'none';
                 kittyZone.style.display = 'block';
                 kittyZone.style.left = '-150px'; 
                 
-                // Mueve a la izquierda
+                // Esperamos un instante pequeñito y restauramos la animación
                 setTimeout(() => {
+                    kittyZone.style.transition = 'left 6s linear, opacity 1.5s ease-in-out';
                     kittyZone.style.left = finalX;
-                }, 100);
+                }, 50);
 
                 setTimeout(leave, 26000); // Se queda 26s
             }
@@ -489,7 +491,8 @@
                 
                 setTimeout(() => {
                     kittyZone.style.display = 'none';
-                    const waitTime = 30000 + Math.random() * 20000;
+                    // Modificado: Ahora regresa rápido, entre 5 y 10 segundos
+                    const waitTime = 5000 + Math.random() * 5000;
                     setTimeout(arrive, waitTime);
                 }, 6000); 
             }
