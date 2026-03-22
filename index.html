@@ -174,14 +174,13 @@
         /* === MODIFICADO: CONTENEDOR DEL GIF DE HELLO KITTY === */
         #kitty-gif-container {
             position: absolute;
-            bottom: -15px; /* Ajustado para que sus piecitos queden detrás del pasto */
+            bottom: 10px; /* Ajustado para que esté SOBRE el pasto, no detrás */
             left: calc(50% + 55px); /* A un lado del tronco (derecha) */
-            /* transform: translateX(-50%); <- ELIMINADO */
             width: 90px; /* Tamaño ideal bajo el árbol, más pequeña para no tapar la rama */
             height: 90px;
-            z-index: 3; /* Por encima del tronco (1) y detrás del pasto (4) */
+            z-index: 5; /* Por encima de todo, incluido el pasto (z-index: 4) */
             pointer-events: none; /* No interfiere con clics */
-            opacity: 1; /* Visible desde el inicio, cambiado de 0 a 1 */
+            opacity: 1; /* Visible desde el inicio */
             transition: opacity 1.5s ease-in-out; /* Aparición mágica y suave */
         }
 
@@ -197,7 +196,7 @@
             width: 300px;
             height: 30px; 
             margin: -40px auto 10px auto; 
-            z-index: 4; /* Cubre los pies del árbol y de Hello Kitty */
+            z-index: 4; /* Cubre los pies del árbol, pero Hello Kitty (z-index: 5) está SOBRE él */
             overflow: hidden; 
             display: flex;
             align-items: flex-end; 
