@@ -92,7 +92,6 @@
             margin-bottom: 10px;
         }
 
-        /* Animación para el corazón que bombea */
         .pumping-heart {
             display: inline-block;
             animation: pumpHeart 0.8s infinite alternate ease-in-out;
@@ -257,12 +256,12 @@
             50% { transform: scaleX(-1) scaleY(1.08); }
         }
 
-        /* === RECUADRO DEL CONTADOR AJUSTADO === */
+        /* === RECUADRO DEL CONTADOR (MÁS ANCHO) === */
         #counter-zone {
-            width: 95%; /* Más ancho como pediste */
+            width: 98%; /* Aumentado para mayor ancho visual */
             max-width: 480px;
-            margin: 30px auto 40px auto; /* Más espacio abajo del pasto (30px) */
-            padding: 15px; 
+            margin: 30px auto 40px auto; 
+            padding: 15px 5px; /* Reduje padding lateral para aprovechar el ancho */
             border: 2px solid #5d4037; 
             border-radius: 12px; 
             background-color: #ffffff; 
@@ -278,9 +277,9 @@
         }
         
         #timer { 
-            font-size: 1.1rem; 
+            font-size: 1.05rem; /* Ajuste ligero para que quepa bien en el ancho */
             font-weight: 500; 
-            letter-spacing: 0.5px; 
+            letter-spacing: 0.2px; 
             color: #1a1a1a; 
         }
     </style>
@@ -306,7 +305,7 @@
         <div id="grass-zone"></div>
 
         <div id="counter-zone">
-            <span class="counter-title">Me Enamoré De Ti Hace..</span>
+            <span class="counter-title">Me Enamoré De Ti Desde Hace..</span>
             <div id="timer">Calculando...</div>
         </div>
     </div>
