@@ -171,13 +171,33 @@
             100% { transform: translate(-50%, 450px) rotate(360deg); opacity: 0; }
         }
 
+        /* === NUEVO: CONTENEDOR DEL GIF DE HELLO KITTY === */
+        #kitty-gif-container {
+            position: absolute;
+            bottom: -15px; /* Ajustado para que sus piecitos queden detrás del pasto */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px; /* Tamaño ideal bajo el árbol */
+            height: 110px;
+            z-index: 3; /* Por encima del tronco (1) y detrás del pasto (4) */
+            pointer-events: none; /* No interfiere con clics */
+            opacity: 0; /* Totalmente transparente al inicio */
+            transition: opacity 1.5s ease-in-out; /* Aparición mágica y suave */
+        }
+
+        .kitty-gif {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         /* === PASTO CON MOVIMIENTO (BLOQUEADO) === */
         #grass-zone {
             position: relative;
             width: 300px;
             height: 30px; 
             margin: -40px auto 10px auto; 
-            z-index: 4; 
+            z-index: 4; /* Cubre los pies del árbol y de Hello Kitty */
             overflow: hidden; 
             display: flex;
             align-items: flex-end; 
@@ -259,27 +279,6 @@
             50% { transform: scaleX(-1) scaleY(1.08); }
         }
 
-        /* === NUEVO: CONTENEDOR DEL VIDEO DE HELLO KITTY === */
-        #kitty-video-container {
-            position: absolute;
-            bottom: 50px; /* Posicionado exactamente sobre el pasto */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 160px; /* Tamaño del video */
-            height: 160px;
-            z-index: 3; /* Detrás del pasto que es 4 */
-            pointer-events: none; /* Para que no interfiera si tocas la pantalla */
-        }
-
-        .kitty-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* Este degradado funde los bordes del video con la página para que no se vea cuadrado */
-            -webkit-mask-image: radial-gradient(circle, black 50%, transparent 80%);
-            mask-image: radial-gradient(circle, black 50%, transparent 80%);
-        }
-
         /* === RECUADRO DEL CONTADOR (BLOQUEADO) === */
         #counter-zone {
             width: 98%; 
@@ -324,20 +323,21 @@
                 <path d="M 35 100 C 40 80, 45 60, 45 40 C 35 30, 20 25, 10 20 C 20 25, 35 35, 45 40 C 45 25, 40 10, 35 0 C 45 15, 50 30, 50 40 C 60 30, 75 25, 85 20 C 75 25, 60 35, 52 42 C 55 60, 60 80, 65 100 Z" fill="#6b4226"/>
             </svg>
             <div id="heart-container"></div>
+            
+            <div id="kitty-gif-container">
+                <img class="kitty-gif" src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZTdocWduaTV5OWFsZGtxZThwcHoweXpzZmk0dml2dng2Y2diN3JqcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kZqbBT64ECtjy/200.gif" alt="Hello Kitty">
+            </div>
         </div>
 
         <div id="grass-zone"></div>
-
-        <div id="kitty-video-container">
-            <video class="kitty-video" src="kitty.mp4" autoplay loop muted playsinline></video>
-        </div>
 
         <div id="counter-zone">
             <span class="counter-title">Me Enamoré De Ti Desde Hace..</span>
             <div id="timer">Calculando...</div>
         </div>
+    </div>
 
-    </div> <script>
+    <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
         const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices. ❤️‍🩹<br><br>Porque cuando hablo contigo todo se vuelve perfectamente lindo y mi amor por ti crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
@@ -375,6 +375,9 @@
                 document.getElementById('text-zone').innerHTML = messageHTML.substring(0, charIndex + 1);
                 charIndex++;
                 setTimeout(typeWriterText, 45); 
+            } else {
+                // === NUEVO: CUANDO EL TEXTO TERMINA, HELLO KITTY APARECE MAGNÍFICAMENTE ===
+                document.getElementById('kitty-gif-container').style.opacity = '1';
             }
         }
 
