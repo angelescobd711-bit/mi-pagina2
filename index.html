@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* === PANTALLA DE BOTÓN INICIAL (MODIFICADA SOLO CON TEXTO Y ANIMACIÓN) === */
+        /* === PANTALLA DE BOTÓN INICIAL (BLOQUEADO) === */
         #start-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -48,7 +48,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Nueva animación linda al hacer clic */
         @keyframes cutePop {
             0% { transform: scale(1) rotate(0deg); }
             40% { transform: scale(1.3) rotate(15deg); }
@@ -63,7 +62,6 @@
             padding-bottom: 5px;
         }
 
-        /* Nuevo estilo para el texto de Fersita */
         .subtitle-text {
             margin-top: 8px;
             font-size: 1.1rem;
@@ -86,7 +84,7 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* Texto superior (BLOQUEADO) */
+        /* Texto superior */
         #text-zone {
             font-size: 1.15rem;
             line-height: 1.4;
@@ -94,13 +92,16 @@
             margin-bottom: 10px;
         }
 
-        .blinking {
-            font-weight: bold;
+        /* === NUEVO: Animación para el corazón que bombea === */
+        .pumping-heart {
             display: inline-block;
-            animation: blinker 1.5s infinite;
+            animation: pumpHeart 0.8s infinite alternate ease-in-out;
         }
 
-        @keyframes blinker { 50% { opacity: 0; } }
+        @keyframes pumpHeart {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.3); }
+        }
 
         /* === ZONA DEL ÁRBOL (BLOQUEADO) === */
         #tree-zone {
@@ -310,7 +311,9 @@
 
     <script>
         const startDate = new Date(2025, 11, 1, 0, 0, 0); 
-        const message = "Flores Amarillas para el amor de mi vida:\n\nSi pudiera elegir un lugar seguro, sería a tu lado.\nCuanto más tiempo estoy contigo más te amo.\n\n— I Love You! —";
+        
+        // === NUEVO TEXTO CON ETIQUETAS HTML Y CORAZÓN BOMBEO ===
+        const messageHTML = "<div style='text-align: center; font-weight: bold; margin-bottom: 10px;'>Flores Amarillas Para Mí Linda 💕:</div>Si pudiera elegir donde estar en estos momentos, sería a tu lado siendo felices.<br><br>Porque cuando hablo contigo todo se vuelve perfecto y mi amor crece aún más <span class='pumping-heart'>💗</span><br><br>Teamito! 💖";
 
         let charIndex = 0;
         let staticFlowers = []; 
@@ -320,17 +323,12 @@
             const startScreen = document.getElementById('start-screen');
             const icon = document.querySelector('.sunflower-icon');
             
-            // Evita que se pueda hacer clic varias veces
             startScreen.onclick = null;
-            
-            // Inicia la animación linda de la flor
             icon.style.animation = 'cutePop 0.6s ease forwards';
             
-            // Espera a que termine la animación de la flor para desvanecer el fondo
             setTimeout(() => {
                 startScreen.style.opacity = '0';
                 
-                // Muestra el contenido principal
                 setTimeout(() => {
                     startScreen.style.display = 'none';
                     document.getElementById('main-content').style.display = 'flex';
@@ -344,22 +342,23 @@
                     
                     actualizarContador();
                     setInterval(actualizarContador, 1000);
-                }, 600); // Tiempo del desvanecimiento
-            }, 400); // Tiempo de la animación de saltito
+                }, 600); 
+            }, 400); 
         }
 
-        // TODO DE AQUÍ EN ADELANTE ESTÁ ABSOLUTAMENTE BLOQUEADO E INTACTO
+        // === NUEVO: FUNCIÓN DE ESCRITURA INTELIGENTE QUE LEE HTML ===
         function typeWriterText() {
-            if (charIndex < message.length) {
-                const char = message.charAt(charIndex);
-                if (message.substring(charIndex, charIndex + 17) === "— I Love You! —") {
-                    document.getElementById('text-zone').innerHTML += '<span class="blinking">I Love You!</span>';
-                    charIndex += 17;
-                } else {
-                    document.getElementById('text-zone').innerHTML += char === '\n' ? '<br>' : char;
-                    charIndex++;
+            if (charIndex < messageHTML.length) {
+                // Si encontramos una etiqueta HTML (como <div> o <br>), la leemos completa de un golpe
+                if (messageHTML.charAt(charIndex) === '<') {
+                    while (messageHTML.charAt(charIndex) !== '>') {
+                        charIndex++;
+                    }
                 }
-                setTimeout(typeWriterText, 60);
+                
+                document.getElementById('text-zone').innerHTML = messageHTML.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeWriterText, 45); // Velocidad de escritura
             }
         }
 
